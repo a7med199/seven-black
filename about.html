@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Se7en</title>
+  <meta name="description" content="Brand story for a minimalist luxury streetwear concept." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="about">
+  <div class="page-transition"></div>
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container">
+      <a href="index.html" class="brand" aria-label="Se7en home"><img src="assets/Seven7.png" alt="Se7en" class="brand-logo"></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span></button>
+      <div class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <button class="cart-button" id="cartButton">Cart <span id="cartCount">0</span></button>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-drawer__header"><h3>Cart</h3><button class="icon-button" id="closeCart">✕</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer"><div class="cart-total-row"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div><button class="primary-button full checkout-button">Checkout</button></div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <main class="page-shell about-page">
+    <section class="page-hero compact about-hero">
+      <div class="container reveal">
+        <p class="eyebrow">Brand Story</p>
+        <h1>Luxury stripped down<br>to its purest signal</h1>
+      </div>
+    </section>
+
+    <section class="container about-grid">
+      <div class="about-panel reveal">
+        <h2>Founded on restraint</h2>
+        <p>LUXWEAR is imagined as a monochrome streetwear label built around silhouette, proportion, and texture instead of noise. Every piece is designed to feel essential, elevated, and effortless.</p>
+      </div>
+      <div class="about-panel reveal delay-1">
+        <h2>Designed for modern motion</h2>
+        <p>The digital experience mirrors the garments themselves—bold, minimal, and smooth. Motion is subtle, performance-conscious, and always in service of the brand atmosphere.</p>
+      </div>
+      <div class="about-panel reveal delay-2 wide parallax" data-speed="0.04">
+        <p class="quote">“We design the quiet pieces that speak the loudest.”</p>
+      </div>
+    </section>
+  </main>
+
+<a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+  <footer class="site-footer"><div class="container footer-grid"><div><a href="index.html" class="brand footer-brand">Se7en</a><p>Precision in black and white.</p></div><div><h4>Navigate</h4><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><div><h4>Social</h4><a href="https://www.instagram.com/seven7_eg/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop — Se7en</title>
+  <meta name="description" content="Shop premium monochrome streetwear by category." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="shop">
+  <div class="page-transition"></div>
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container">
+      <a href="index.html" class="brand" aria-label="Se7en home"><img src="assets/Seven7.png" alt="Se7en" class="brand-logo"></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span></button>
+      <div class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <button class="cart-button" id="cartButton">Cart <span id="cartCount">0</span></button>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-drawer__header"><h3>Cart</h3><button class="icon-button" id="closeCart">✕</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer"><div class="cart-total-row"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div><button class="primary-button full checkout-button">Checkout</button></div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <main class="page-shell">
+    <section class="page-hero compact">
+      <div class="container reveal">
+        <p class="eyebrow">Collection</p>
+        <h1>Minimal pieces,<br>maximum presence</h1>
+        <p>Filter the current drop by category and explore product motion states with premium hover interaction.</p>
+      </div>
+    </section>
+
+    <!-- Primary category filters -->
+    <section class="container shop-controls reveal">
+      <div class="filter-group">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="tshirt">T-Shirts</button>
+        <button class="filter-chip" data-filter="Pants">Pants</button>
+        <button class="filter-chip" data-filter="accessory">Accessories</button>
+      </div>
+    </section>
+
+    <!-- T-shirt sub-filters (Box Fit / Oversize Fit / Regular) -->
+    <section class="container reveal" id="tshirt-subfilters" style="display:none; margin-bottom: 0;">
+      <div class="subfilter-row">
+        <span class="subfilter-label">Fit:</span>
+        <div class="filter-group">
+          <button class="subfilter-chip filter-chip active" data-sub="all">All Fits</button>
+          <button class="subfilter-chip filter-chip" data-sub="Box Fit">Box Fit</button>
+          <button class="subfilter-chip filter-chip" data-sub="Oversize Fit">Oversize Fit</button>
+          <button class="subfilter-chip filter-chip" data-sub="Regular">Regular</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="container product-grid shop-grid">
+
+      <!-- ── T-SHIRT: Box Fit ─────────────────────────────────────────────── -->
+      <article class="product-card reveal product-tilt" data-category="tshirt" data-subcategory="Box Fit">
+        <a href="product.html?id=tshirt-box-1" class="product-card__media product-img-frame">
+          <img src="assets/tshirt-box-black.PNG" alt="Box Fit Tee — Original Black" class="product-img" loading="lazy">
+          <span class="fit-badge">Box Fit</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Box Fit · Original</span>
+            <h3>Box Fit Tee — Original</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#0a0a0a; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#8A8A8A" title="Gray"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>550 L.E</span><button class="primary-button add-to-cart" data-id="tshirt-box-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Box Fit New Drop ─────────────────────────────────────── -->
+      <article class="product-card reveal delay-1 product-tilt" data-category="tshirt" data-subcategory="Box Fit">
+        <a href="product.html?id=tshirt-box-new-1" class="product-card__media product-img-frame">
+          <img src="assets/box-fit/box_white1.PNG" alt="Box Fit Tee — New Drop White" class="product-img" loading="lazy">
+          <span class="fit-badge">Box Fit · New</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Box Fit · New Drop</span>
+            <h3>Box Fit Tee — New Drop</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+                <span class="cdot" style="background:#0A0A0A; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="cdot" style="background:#555555" title="Dark Gray"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>720 L.E</span><button class="primary-button add-to-cart" data-id="tshirt-box-new-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Oversize Fit ───────────────────────────────────────── -->
+      <article class="product-card reveal delay-2 product-tilt" data-category="tshirt" data-subcategory="Oversize Fit">
+        <a href="product.html?id=tshirt-over-1" class="product-card__media product-img-frame">
+          <img src="assets/tshirt-box-burgundy.PNG" alt="Oversize Fit Tee — Original Black" class="product-img" loading="lazy">
+          <span class="fit-badge">Oversize Fit</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Oversize Fit · Original</span>
+            <h3>Oversize Fit Tee — Original</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#0a0a0a; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#C0C0C0" title="Light Gray"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+              <span class="cdot" style="background:#89C4E1" title="Baby Blue"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>600 L.E</span><button class="primary-button add-to-cart" data-id="tshirt-over-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Oversize Fit New Drop ───────────────────────────────── -->
+      <article class="product-card reveal delay-3 product-tilt" data-category="tshirt" data-subcategory="Oversize Fit">
+        <a href="product.html?id=tshirt-over-new-1" class="product-card__media product-img-frame">
+          <img src="assets/oversize-fit/over_navy_blue1.PNG" alt="Oversize Fit Tee — New Drop Black" class="product-img" loading="lazy">
+          <span class="fit-badge">Oversize · New</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Oversize Fit · New Drop</span>
+            <h3>Oversize Fit Tee — New Drop</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#0a0a0a; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#555555" title="Dark Gray"></span>
+              <span class="cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>750 L.E</span><button class="primary-button add-to-cart" data-id="tshirt-over-new-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Regular Fit ────────────────────────────────────────── -->
+      <article class="product-card reveal delay-4 product-tilt" data-category="tshirt" data-subcategory="Regular">
+        <a href="product.html?id=tshirt-reg-1" class="product-card__media product-img-frame">
+          <img src="assets/tshirt-box-gray.PNG" alt="Regular Fit Tee" class="product-img" loading="lazy">
+          <span class="fit-badge">Regular</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Regular</span>
+            <h3>Regular Fit Tee</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#0a0a0a; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>550 L.E</span><button class="primary-button add-to-cart" data-id="tshirt-reg-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Cloud Box tee ─────────────────────────────────────── -->
+      <article class="product-card reveal product-tilt" data-category="tshirt" data-subcategory="Box Fit">
+        <a href="product.html?id=cloud-box-tee" class="product-card__media product-img-frame">
+          <img src="assets/new/red-face.png" alt="Cloud Box tee White" class="product-img" loading="lazy">
+          <span class="fit-badge">Box Fit · New</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Box Fit · New</span>
+            <h3>Cloud Box tee</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#C62828" title="Red"></span>
+              <span class="cdot" style="background:#0A0A0A; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#8A8A8A" title="Gray"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>720 L.E</span><button class="primary-button add-to-cart" data-id="cloud-box-tee">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── T-SHIRT: Slouch Standard tee ────────────────────────────────── -->
+      <article class="product-card reveal product-tilt" data-category="tshirt" data-subcategory="Oversize Fit">
+        <a href="product.html?id=slouch-standard-tee" class="product-card__media product-img-frame">
+          <img src="assets/new/red-back.png" alt="Slouch Standard tee White" class="product-img" loading="lazy">
+          <span class="fit-badge">Oversize · New</span>
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">T-Shirt · Oversize Fit · New</span>
+            <h3>Slouch Standard tee</h3>
+            <div class="card-color-dots">
+              <span class="cdot" style="background:#C62828" title="Red"></span>
+              <span class="cdot" style="background:#0A0A0A; border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="cdot" style="background:#8A8A8A" title="Gray"></span>
+              <span class="cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+          </div>
+          <div class="product-card__meta"><span>750 L.E</span><button class="primary-button add-to-cart" data-id="slouch-standard-tee">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── PANTS ───────────────────────────────────────────────────────── -->
+      <article class="product-card reveal product-tilt" data-category="Pants">
+        <a href="product.html?id=Pants-1" class="product-card__media product-img-frame">
+          <img src="assets/IMG_1349.PNG" alt="Sweet Pants" class="product-img" loading="lazy">
+        </a>
+        <div class="product-card__body">
+          <div>
+            <span class="product-tag">Pants</span>
+            <h3>Sweet Pants</h3>
+          </div>
+          <div class="product-card__meta"><span>600 L.E</span><button class="primary-button add-to-cart" data-id="Pants-1">Add to cart</button></div>
+        </div>
+      </article>
+
+      <!-- ── ACCESSORIES ─────────────────────────────────────────────────── -->
+
+    </section>
+  </main>
+
+<a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+  <footer class="site-footer"><div class="container footer-grid"><div><a href="index.html" class="brand footer-brand">Se7en</a><p>Premium monochrome essentials.</p></div><div><h4>Navigate</h4><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><div><h4>Social</h4><a href="https://www.instagram.com/seven7_eg/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

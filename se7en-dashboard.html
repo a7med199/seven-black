@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Se7en — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --panel:#111111;
+  --panel2:#181818;
+  --panel3:#1e1e1e;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --line:rgba(255,255,255,0.12);
+  --text:#f5f5f5;
+  --muted:rgba(255,255,255,0.45);
+  --muted2:rgba(255,255,255,0.62);
+  --green:#29c76f;
+  --amber:#f0a500;
+  --red:#e04f4f;
+  --blue:#4f8ef0;
+  --purple:#9b7ff0;
+  --shadow:0 30px 80px rgba(0,0,0,0.36);
+  --font:'Inter',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --transition:280ms cubic-bezier(.2,.8,.2,1);
+}
+body{
+  background:
+    radial-gradient(circle at top right,rgba(255,255,255,0.04),transparent 25%),
+    radial-gradient(circle at bottom left,rgba(255,255,255,0.03),transparent 22%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:14px;
+  line-height:1.5;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(circle at center,black 45%,transparent 90%);
+  opacity:0.15;
+  z-index:0;
+}
+button{cursor:pointer;font-family:var(--font);outline:none}
+input,select,textarea{font-family:var(--font);outline:none}
+.sr-only{position:absolute;left:-9999px}
+
+.shell{display:grid;grid-template-columns:210px 1fr;min-height:100vh;position:relative;z-index:1}
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.sidebar{
+  background:rgba(255,255,255,0.02);
+  border-right:1px solid var(--border);
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+.logo-wrap{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
+.logo-img{width:130px;height:auto;display:block;object-fit:contain;filter:brightness(1.1)}
+.logo-tag{
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  margin-top:6px;
+  font-family:var(--mono);
+}
+.nav-section{padding:14px 0 8px}
+.nav-label{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  color:var(--muted);
+  padding:0 20px;
+  margin-bottom:4px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 20px;
+  border:none;
+  background:none;
+  color:var(--muted2);
+  font-size:13px;
+  font-weight:500;
+  width:100%;
+  text-align:left;
+  border-left:2px solid transparent;
+  transition:color var(--transition),background var(--transition),border-color var(--transition);
+}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.nav-item.on{color:var(--text);background:rgba(255,255,255,0.05);border-left-color:var(--text)}
+.nav-badge{
+  margin-left:auto;
+  background:rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:1px 7px;
+  font-size:10px;
+  font-family:var(--mono);
+}
+.nav-badge.alert{background:rgba(224,79,79,0.18);color:var(--red)}
+
+/* ── Content area ─────────────────────────────────────────── */
+.content{overflow:auto}
+.topbar{
+  padding:14px 26px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(10,10,10,0.72);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.breadcrumb{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.breadcrumb span{color:var(--text);font-weight:600}
+.breadcrumb-logo{width:66px;height:auto;object-fit:contain;filter:brightness(1.1)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+
+.tb-btn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+  border-radius:999px;
+  padding:9px 18px;
+  font-size:12px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:transform var(--transition),background var(--transition),border-color var(--transition);
+}
+.tb-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.28);transform:translateY(-1px)}
+.tb-btn.primary{
+  background:var(--text);
+  color:#000;
+  border-color:var(--text);
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(255,255,255,0.12);
+}
+.tb-btn.primary:hover{opacity:0.88;transform:translateY(-1px)}
+
+.sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px}
+.sync-dot.live{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sync-dot.local{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.sync-dot.error{background:var(--red)}
+
+/* ── Pages ────────────────────────────────────────────────── */
+.page{display:none;padding:26px}
+.page.on{display:block}
+
+/* ── Metric cards ─────────────────────────────────────────── */
+.metrics-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.mcard{
+  background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  backdrop-filter:blur(12px);
+}
+.mcard-label{font-size:9px;text-transform:uppercase;letter-spacing:0.16em;color:var(--muted);margin-bottom:10px}
+.mcard-val{font-size:26px;font-weight:700;letter-spacing:-0.04em;font-family:var(--mono);color:var(--text)}
+.mcard-foot{font-size:11px;color:var(--muted2);margin-top:5px;display:flex;align-items:center;gap:4px}
+.up{color:var(--green)}.down{color:var(--red)}.warn{color:var(--amber)}
+
+/* ── Chart panels ─────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-bottom:24px}
+.chart-panel{
+  background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  backdrop-filter:blur(12px);
+}
+.chart-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.chart-title{font-size:13px;font-weight:600;color:var(--text)}
+.chart-sub{font-size:11px;color:var(--muted)}
+.chart-box{position:relative}
+
+/* ── Table panels ─────────────────────────────────────────── */
+.tpanel{
+  background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.tpanel-hd{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 18px;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+  gap:10px;
+}
+.tpanel-title{font-size:13px;font-weight:600}
+.controls-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.srch{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:8px 14px;
+  color:var(--text);
+  font-size:12px;
+  width:200px;
+  transition:border-color var(--transition),background var(--transition);
+}
+.srch:focus{border-color:var(--line);background:rgba(255,255,255,0.06)}
+.chip{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:5px 13px;
+  color:var(--muted2);
+  font-size:11px;
+  transition:all var(--transition);
+  font-weight:500;
+}
+.chip:hover{border-color:var(--line);color:var(--text)}
+.chip.on{background:var(--text);color:#000;border-color:var(--text);font-weight:700}
+
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{
+  text-align:left;
+  padding:10px 16px;
+  font-size:9px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:1px solid var(--border);
+  font-weight:600;
+  background:rgba(255,255,255,0.02);
+}
+td{
+  padding:12px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  font-size:12px;
+  vertical-align:middle;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* ── Badges ───────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:0.04em;white-space:nowrap}
+.b-new{background:rgba(79,142,240,0.14);color:#4f8ef0}
+.b-proc{background:rgba(240,165,0,0.14);color:#f0a500}
+.b-ship{background:rgba(155,127,240,0.14);color:#9b7ff0}
+.b-deliv{background:rgba(41,199,111,0.14);color:#29c76f}
+.b-cancel{background:rgba(224,79,79,0.12);color:#e04f4f}
+
+.act-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 11px;
+  color:var(--muted2);
+  font-size:11px;
+  font-family:var(--font);
+  transition:all var(--transition);
+}
+.act-btn:hover{border-color:var(--line);color:var(--text)}
+.act-btn.danger:hover{border-color:rgba(224,79,79,0.5);color:var(--red)}
+.link-id{color:var(--blue);cursor:pointer;font-family:var(--mono);font-size:11px}
+.link-id:hover{text-decoration:underline}
+.mono{font-family:var(--mono);font-size:11px}
+
+/* ── Pagination ───────────────────────────────────────────── */
+.tfoot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+  border-top:1px solid var(--border);
+  font-size:11px;
+  color:var(--muted);
+}
+.pgbtns{display:flex;gap:5px;flex-wrap:wrap}
+.pgbtn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 12px;
+  color:var(--muted2);
+  font-size:11px;
+  font-family:var(--font);
+  transition:all var(--transition);
+}
+.pgbtn:hover{color:var(--text);border-color:var(--line)}
+.pgbtn.cur{background:var(--text);color:#000;border-color:var(--text);font-weight:700}
+
+.status-sel{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 10px;
+  color:var(--text);
+  font-size:11px;
+  font-family:var(--font);
+  cursor:pointer;
+  transition:border-color var(--transition);
+}
+.status-sel:hover{border-color:var(--line)}
+
+/* ── Modals ───────────────────────────────────────────────── */
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(8px);
+  z-index:100;
+  align-items:flex-start;
+  justify-content:center;
+  padding:40px 16px;
+  overflow-y:auto;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:#121212;
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:28px;
+  width:500px;
+  max-width:100%;
+  box-shadow:var(--shadow);
+}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:15px;font-weight:700}
+.modal-close{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:6px 13px;
+  color:var(--muted2);
+  font-size:11px;
+  font-family:var(--font);
+  transition:all var(--transition);
+}
+.modal-close:hover{color:var(--text);border-color:var(--line)}
+.fg{display:grid;gap:5px;margin-bottom:12px}
+.fg label{font-size:9px;text-transform:uppercase;letter-spacing:0.16em;color:var(--muted)}
+.fg input,.fg select,.fg textarea{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:9px 13px;
+  color:var(--text);
+  font-size:12px;
+  width:100%;
+  transition:border-color var(--transition),background var(--transition);
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--line);background:rgba(255,255,255,0.06)}
+.fg select option{background:#121212}
+.fg textarea{resize:vertical;min-height:72px}
+.fgrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-ft{
+  display:flex;
+  gap:9px;
+  justify-content:flex-end;
+  margin-top:18px;
+  border-top:1px solid var(--border);
+  padding-top:16px;
+}
+.btn-ghost{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:9px 18px;
+  color:var(--muted2);
+  font-size:12px;
+  font-family:var(--font);
+  transition:all var(--transition);
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--line)}
+.btn-save{
+  background:var(--text);
+  color:#000;
+  border:none;
+  border-radius:999px;
+  padding:9px 22px;
+  font-size:12px;
+  font-weight:700;
+  font-family:var(--font);
+  box-shadow:0 8px 24px rgba(255,255,255,0.1);
+  transition:opacity var(--transition),transform var(--transition);
+}
+.btn-save:hover{opacity:0.88;transform:translateY(-1px)}
+
+/* ── Order detail modal ───────────────────────────────────── */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.dcard{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+}
+.dcard-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:9px}
+.dr{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.dk{color:var(--muted2)}
+.timeline{display:flex;margin:6px 0 18px}
+.tstep{flex:1;text-align:center;position:relative}
+.tstep::before{content:'';position:absolute;top:10px;left:-50%;width:100%;height:1px;background:var(--border);z-index:0}
+.tstep:first-child::before{display:none}
+.tdot{
+  width:21px;height:21px;border-radius:50%;
+  border:1.5px solid var(--border);
+  background:var(--bg);
+  margin:0 auto 5px;
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;
+}
+.tdot.done{background:var(--text);border-color:var(--text);color:#000}
+.tdot.active{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,240,0.18)}
+.tlbl{font-size:9px;color:var(--muted)}
+.item-line{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.item-line:last-child{border-bottom:none}
+.total-blk{border-top:1px solid var(--border);padding-top:10px;margin-top:6px}
+.tot-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;color:var(--muted2)}
+.tot-row.grand{font-weight:700;font-size:14px;color:var(--text);border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
+
+/* ── Products grid ────────────────────────────────────────── */
+.prod-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pcard{
+  background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  transition:border-color var(--transition);
+}
+.pcard:hover{border-color:var(--line)}
+.pname{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcat{font-size:11px;color:var(--muted2)}
+.pprice{font-size:20px;font-weight:800;font-family:var(--mono);letter-spacing:-0.03em}
+.pstock{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:600}
+.ps-ok{background:rgba(41,199,111,0.12);color:var(--green)}
+.ps-low{background:rgba(240,165,0,0.12);color:var(--amber)}
+.pbtns{display:flex;gap:7px;margin-top:4px}
+.pbtn{
+  flex:1;
+  background:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:7px;
+  font-size:11px;
+  font-family:var(--font);
+  color:var(--muted2);
+  transition:all var(--transition);
+}
+.pbtn:hover{border-color:var(--line);color:var(--text)}
+
+/* ── Settings ─────────────────────────────────────────────── */
+.scards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scard{
+  background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+}
+.scard-title{font-size:13px;font-weight:700;margin-bottom:14px}
+.srow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.srow:last-child{border-bottom:none}
+.slbl{font-size:13px}.ssub{font-size:10px;color:var(--muted);margin-top:1px}
+.tog{
+  width:36px;height:20px;border-radius:10px;border:none;
+  position:relative;transition:background var(--transition);flex-shrink:0;
+}
+.tog.on{background:var(--text)}.tog.off{background:var(--panel3)}
+.tog::after{
+  content:'';position:absolute;
+  width:14px;height:14px;border-radius:50%;
+  top:3px;transition:left var(--transition);
+}
+.tog.on::after{left:19px;background:#000}
+.tog.off::after{left:3px;background:#555}
+
+.empty-row td{text-align:center;color:var(--muted);padding:40px!important}
+
+/* ── Toasts ───────────────────────────────────────────────── */
+.toast-wrap{
+  position:fixed;bottom:20px;right:20px;
+  display:flex;flex-direction:column;gap:8px;
+  z-index:200;pointer-events:none;
+}
+.toast{
+  background:#1a1a1a;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:10px 18px;
+  font-size:12px;
+  color:var(--text);
+  transform:translateY(12px);
+  opacity:0;
+  transition:all 0.28s;
+  pointer-events:none;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok .ti{color:var(--green)}.toast.err .ti{color:var(--red)}
+
+.legend{display:flex;gap:14px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted2)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* ── Item adder ───────────────────────────────────────────── */
+.item-adder{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.item-row-form{display:grid;grid-template-columns:1fr 80px 60px 60px 32px;gap:6px;align-items:center}
+.item-row-form select,.item-row-form input{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px 8px;
+  color:var(--text);
+  font-size:11px;
+  font-family:var(--font);
+  width:100%;
+}
+.item-row-form select option{background:#121212}
+.item-row-form button{
+  background:none;border:1px solid var(--border);border-radius:8px;
+  padding:5px;color:var(--muted2);font-size:11px;font-family:var(--font);
+  transition:all var(--transition);
+}
+.item-row-form button:hover{border-color:rgba(224,79,79,0.5);color:var(--red)}
+
+/* Source badges */
+.src-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:0.04em}
+.src-store{background:rgba(41,199,111,0.12);color:var(--green)}
+.src-admin{background:rgba(79,142,240,0.12);color:var(--blue)}
+
+/* ── WhatsApp notification banner ─────────────────────────────── */
+.wa-banner{
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:300;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  pointer-events:none;
+  max-width:340px;
+}
+.wa-card{
+  background:#0a1f0e;
+  border:1px solid rgba(37,211,102,0.35);
+  border-radius:14px;
+  padding:13px 16px;
+  font-size:12px;
+  color:#f5f5f5;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  transform:translateX(120%);
+  opacity:0;
+  transition:transform 0.3s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
+  pointer-events:all;
+  cursor:default;
+}
+.wa-card.show{transform:translateX(0);opacity:1}
+.wa-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+.wa-card-title{font-weight:700;font-size:12px;color:#25D366;display:flex;align-items:center;gap:6px}
+.wa-card-dismiss{background:none;border:none;color:rgba(255,255,255,0.4);font-size:14px;padding:0;line-height:1;cursor:pointer;flex-shrink:0}
+.wa-card-dismiss:hover{color:#fff}
+.wa-card-customer{color:rgba(255,255,255,0.8);margin-bottom:10px;line-height:1.5}
+.wa-card-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  background:#25D366;
+  color:#08130c;
+  border:none;
+  border-radius:999px;
+  padding:9px 16px;
+  font-size:12px;
+  font-weight:800;
+  font-family:var(--font);
+  cursor:pointer;
+  transition:opacity 0.18s;
+}
+.wa-card-btn:hover{opacity:0.88}
+</style>
+</head>
+<body>
+<h2 class="sr-only">Se7en admin dashboard</h2>
+
+<div class="shell">
+
+<!-- ── Sidebar ──────────────────────────────────────────────── -->
+<nav class="sidebar" aria-label="Main navigation">
+  <div class="logo-wrap">
+    <img src="assets/Seven7.png" alt="SE7EN Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div style="display:none;font-size:18px;font-weight:900;letter-spacing:0.18em;color:#f5f5f5">Se7en</div>
+    <div class="logo-tag">Admin Dashboard</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <button class="nav-item on" data-p="overview" id="nav-overview">📊 Overview</button>
+    <button class="nav-item" data-p="orders" id="nav-orders">🛍 Orders<span class="nav-badge alert" id="nb-orders" style="display:none">0</span></button>
+    <button class="nav-item" data-p="products" id="nav-products">👕 Products</button>
+    <button class="nav-item" data-p="customers" id="nav-customers">👥 Customers</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">System</div>
+    <button class="nav-item" data-p="settings" id="nav-settings">⚙️ Settings</button>
+  </div>
+</nav>
+
+<!-- ── Main content ──────────────────────────────────────────── -->
+<div class="content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb">
+        <img src="assets/Seven7.png" alt="SE7EN" class="breadcrumb-logo" onerror="this.style.display='none'">
+        <span style="color:var(--muted)">›</span>
+        <span id="page-title">Overview</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="sync-status" style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px">
+        <span class="sync-dot local" id="sync-dot"></span>
+        <span id="sync-label">Connecting…</span>
+      </span>
+      <span style="font-size:11px;color:var(--muted);font-family:var(--mono)" id="date-disp"></span>
+      <button class="tb-btn" id="btn-export">⬇ Export</button>
+      <button class="tb-btn primary" id="btn-new-order">＋ New Order</button>
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW ──────────────────────────────────────────── -->
+  <div class="page on" id="page-overview">
+    <div class="metrics-row">
+      <div class="mcard"><div class="mcard-label">Revenue</div><div class="mcard-val" id="m-rev">0 L.E</div><div class="mcard-foot"><span class="up" id="m-rev-f">0 L.E this week</span></div></div>
+      <div class="mcard"><div class="mcard-label">Total Orders</div><div class="mcard-val" id="m-total">0</div><div class="mcard-foot" id="m-total-f">all time</div></div>
+      <div class="mcard"><div class="mcard-label">Avg Order Value</div><div class="mcard-val" id="m-aov">0 L.E</div><div class="mcard-foot">per order</div></div>
+      <div class="mcard"><div class="mcard-label">Needs Action</div><div class="mcard-val warn" id="m-action">0</div><div class="mcard-foot warn">New + Processing</div></div>
+    </div>
+    <div class="grid2">
+      <div class="chart-panel">
+        <div class="chart-hd"><div><div class="chart-title">Revenue — last 14 days</div><div class="chart-sub">Non-cancelled orders only</div></div></div>
+        <div class="chart-box" style="height:200px"><canvas id="rev-chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-hd"><div class="chart-title">Order status</div></div>
+        <div class="chart-box" style="height:160px"><canvas id="status-chart"></canvas></div>
+        <div class="legend" id="status-legend" style="margin-top:12px"></div>
+      </div>
+    </div>
+    <div class="tpanel">
+      <div class="tpanel-hd"><div class="tpanel-title">Recent orders</div></div>
+      <table><thead><tr>
+        <th style="width:100px">ID</th>
+        <th>Customer</th>
+        <th style="width:80px">Source</th>
+        <th style="width:90px">Total</th>
+        <th style="width:110px">Status</th>
+        <th style="width:100px">Date</th>
+      </tr></thead>
+      <tbody id="recent-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ── ORDERS ────────────────────────────────────────────── -->
+  <div class="page" id="page-orders">
+    <div class="tpanel">
+      <div class="tpanel-hd">
+        <div class="tpanel-title">All orders</div>
+        <div class="controls-row">
+          <input class="srch" id="ord-search" placeholder="Search name, email, ID…">
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="filter-chips">
+            <button class="chip on" data-f="all">All</button>
+            <button class="chip" data-f="New">New</button>
+            <button class="chip" data-f="Processing">Processing</button>
+            <button class="chip" data-f="Shipped">Shipped</button>
+            <button class="chip" data-f="Delivered">Delivered</button>
+            <button class="chip" data-f="Cancelled">Cancelled</button>
+          </div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th style="width:92px">ID</th>
+          <th style="width:160px">Customer</th>
+          <th>Items</th>
+          <th style="width:90px">Total</th>
+          <th style="width:120px">Status</th>
+          <th style="width:90px">Date</th>
+          <th style="width:110px">Actions</th>
+        </tr></thead>
+        <tbody id="orders-tbody"></tbody>
+      </table>
+      <div class="tfoot">
+        <span id="pg-info"></span>
+        <div class="pgbtns" id="pg-btns"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRODUCTS ──────────────────────────────────────────── -->
+  <div class="page" id="page-products">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-size:15px;font-weight:700">Product catalog <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:6px" id="prod-count"></span></div>
+      <button class="tb-btn primary" id="btn-add-prod">＋ Add product</button>
+    </div>
+    <div class="prod-grid" id="prod-grid"></div>
+  </div>
+
+  <!-- ── CUSTOMERS ─────────────────────────────────────────── -->
+  <div class="page" id="page-customers">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-size:15px;font-weight:700">Customer directory</div>
+      <input class="srch" id="cust-search" placeholder="Search name or email…">
+    </div>
+    <div class="tpanel">
+      <table>
+        <thead><tr>
+          <th style="width:150px">Name</th>
+          <th>Email</th>
+          <th style="width:120px">Phone</th>
+          <th style="width:60px">Orders</th>
+          <th style="width:90px">Spent</th>
+          <th style="width:110px">City</th>
+        </tr></thead>
+        <tbody id="cust-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS ──────────────────────────────────────────── -->
+  <div class="page" id="page-settings">
+    <div class="scards">
+      <div class="scard">
+        <div class="scard-title">Store</div>
+        <div class="srow"><div><div class="slbl">Currency</div></div><select style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:999px;padding:6px 12px;color:var(--text);font-size:12px;font-family:var(--font)"><option>EGP</option><option>USD</option><option>EUR</option></select></div>
+        <div class="srow"><div><div class="slbl">Free shipping above (L.E)</div></div><input value="1500" style="width:80px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:999px;padding:6px 12px;color:var(--text);font-size:12px;text-align:right"></div>
+        <div class="srow"><div><div class="slbl">Shipping cost (L.E)</div></div><input value="65" style="width:70px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:999px;padding:6px 12px;color:var(--text);font-size:12px;text-align:right"></div>
+      </div>
+      <div class="scard">
+        <div class="scard-title">Notifications</div>
+        <div class="srow"><div><div class="slbl">New order alerts</div><div class="ssub">Sound + browser notification on new order</div></div><button class="tog on" id="tog-new-order" data-toggle></button></div>
+        <div class="srow"><div><div class="slbl">Low stock</div><div class="ssub">Below 5 units</div></div><button class="tog on" id="tog-low-stock" data-toggle></button></div>
+        <div class="srow"><div><div class="slbl">WhatsApp confirmations</div><div class="ssub">Send order summary via WhatsApp</div></div><button class="tog off" id="tog-whatsapp" data-toggle data-reveals="wa-number-row"></button></div>
+        <div id="wa-number-row" style="display:none;padding:10px 0 4px;width:100%;flex-direction:column;gap:8px">
+          <label style="font-size:9px;text-transform:uppercase;letter-spacing:0.16em;color:var(--muted)">Your WhatsApp number</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="wa-phone" placeholder="+201012345678"
+              style="flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:999px;padding:8px 14px;color:var(--text);font-size:12px;font-family:var(--mono)">
+            <button id="btn-save-wa" style="background:#25D366;color:#08130c;border:none;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;white-space:nowrap;flex-shrink:0">Save ✓</button>
+          </div>
+          <div id="wa-phone-status" style="font-size:10px;color:var(--muted)">Include country code — e.g. +201012345678. Press Save or Enter to confirm.</div>
+        </div>
+      </div>
+      <div class="scard" style="grid-column:span 2">
+        <div class="scard-title">Data &amp; Sync</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="tb-btn primary" id="btn-export-2">⬇ Export CSV</button>
+          <button class="tb-btn" id="btn-clear-local">🗑 Clear local</button>
+          <button class="tb-btn" id="btn-seed">📦 Load sample data</button>
+          <button class="tb-btn" id="btn-force-sync">🔄 Force sync</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;border:1px solid var(--border);line-height:1.7">
+          <strong style="color:var(--text)">Data source:</strong> Orders from your storefront are saved to Firebase Firestore and appear here in real-time.<br>
+          Orders you create manually in this dashboard are also saved to Firestore.<br>
+          A local-storage fallback is used when Firestore is unreachable.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /shell -->
+
+<!-- ── ORDER MODAL ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="om-title">New order</div>
+      <button class="modal-close" id="om-close">✕ Close</button>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>First name</label><input id="o-fn" placeholder="Ahmed"></div>
+      <div class="fg"><label>Last name</label><input id="o-ln" placeholder="Hassan"></div>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>Email</label><input id="o-em" type="email" placeholder="ahmed@email.com"></div>
+      <div class="fg"><label>Phone</label><input id="o-ph" placeholder="+20 10…"></div>
+    </div>
+    <div class="fg"><label>Address</label><input id="o-addr" placeholder="Street address"></div>
+    <div class="fgrow">
+      <div class="fg"><label>City</label><input id="o-city" placeholder="Cairo"></div>
+      <div class="fg"><label>Country</label><input id="o-ctry" value="Egypt"></div>
+    </div>
+    <div style="margin-top:14px;margin-bottom:4px">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.16em;color:var(--muted);margin-bottom:8px">Order items</div>
+      <div class="item-adder" id="item-adder"></div>
+      <button class="btn-ghost" style="width:100%;margin-top:6px;font-size:11px;padding:8px" id="btn-add-item-row">＋ Add item</button>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>Discount (L.E)</label><input id="o-discount" type="number" min="0" value="0" placeholder="0"></div>
+      <div class="fg"><label>Status</label>
+        <select id="o-status">
+          <option>New</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>Notes</label><input id="o-notes" placeholder="Special requests…"></div>
+    <div class="modal-ft">
+      <button class="btn-ghost" id="om-cancel">Cancel</button>
+      <button class="btn-save" id="btn-save-order">Save order</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DETAIL MODAL ────────────────────────────────────────── -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal" style="width:540px">
+    <div class="modal-hd">
+      <div class="modal-title" id="dm-title">Order detail</div>
+      <button class="modal-close" id="dm-close">✕ Close</button>
+    </div>
+    <div id="dm-body"></div>
+  </div>
+</div>
+
+<!-- ── PRODUCT MODAL ──────────────────────────────────────── -->
+<div class="modal-overlay" id="prod-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="pm-title">Add product</div>
+      <button class="modal-close" id="pm-close">✕ Close</button>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>Name</label><input id="p-name" placeholder="Box Fit Tee"></div>
+      <div class="fg"><label>Category</label>
+        <select id="p-cat">
+          <option>T-Shirt</option>
+          <option>Pants</option>
+          <option>Hoodie</option>
+          <option>Accessory</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>Subcategory / Fit</label><input id="p-subcat" placeholder="Box Fit, Oversize Fit, Regular…"></div>
+      <div class="fg"><label>Product ID</label><input id="p-id" placeholder="tshirt-box-1" style="font-family:var(--mono);font-size:11px"></div>
+    </div>
+    <div class="fgrow">
+      <div class="fg"><label>Price (L.E)</label><input id="p-price" type="number" placeholder="500"></div>
+      <div class="fg"><label>Stock</label><input id="p-stock" type="number" placeholder="20"></div>
+    </div>
+    <div class="fg" style="margin-top:4px"><label>Description</label><textarea id="p-desc" rows="3" placeholder="Brief description…"></textarea></div>
+    <div class="modal-ft">
+      <button class="btn-ghost" id="pm-cancel">Cancel</button>
+      <button class="btn-save" id="btn-save-prod">Save product</button>
+    </div>
+  </div>
+</div>
+
+<div class="wa-banner" id="wa-banner"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- ── Firebase SDK ───────────────────────────────────────── -->
+<script type="module">
+import { initializeApp }                            from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs,
+         doc, updateDoc, deleteDoc, onSnapshot,
+         query, orderBy }                           from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB2VpDwq1bmnuD4BtfMMQUPQeri5fyoG-o",
+  authDomain: "seven-14202.firebaseapp.com",
+  projectId: "seven-14202",
+  storageBucket: "seven-14202.firebasestorage.app",
+  messagingSenderId: "215608487838",
+  appId: "1:215608487838:web:f4b8e124cfd8092873308f"
+};
+
+const LS_ORDERS = 'se7en_orders_v2';
+const LS_PRODS  = 'se7en_products_v2';
+const PER       = 10;
+
+let state = { orders: [], prods: [], firestoreReady: false };
+let db, ordersCol;
+let currentFilter = 'all';
+let ordPage       = 1;
+let editOrderId   = null;
+let editProdId    = null;
+let firestoreDocMap = {};
+let rChart = null, sChart = null;
+
+const STATUSES = ['New','Processing','Shipped','Delivered','Cancelled'];
+const BCLS     = { New:'b-new', Processing:'b-proc', Shipped:'b-ship', Delivered:'b-deliv', Cancelled:'b-cancel' };
+const SCOLORS  = ['#4f8ef0','#f0a500','#9b7ff0','#29c76f','#e04f4f'];
+
+const uid  = () => 'SE' + Date.now().toString(36).toUpperCase().slice(-6);
+const fmt  = ts  => new Date(ts).toLocaleDateString('en-GB',{ day:'2-digit', month:'short', year:'numeric' });
+const badge    = s => `<span class="badge ${BCLS[s]||''}">${s}</span>`;
+const srcBadge = s => s === 'storefront'
+  ? `<span class="src-badge src-store">storefront</span>`
+  : `<span class="src-badge src-admin">admin</span>`;
+
+async function initFirebase() {
+  try {
+    const app = initializeApp(FIREBASE_CONFIG);
+    db        = getFirestore(app);
+    ordersCol = collection(db, 'orders');
+    setSyncStatus('live', 'Live (Firestore)');
+    state.firestoreReady = true;
+
+    let knownOrderIds = new Set();
+    let initialLoadDone = false;
+
+    const q = query(ordersCol, orderBy('createdAt', 'desc'));
+    onSnapshot(q, snapshot => {
+      const firestoreOrders = [];
+      firestoreDocMap = {};
+      const incomingNew = [];
+
+      snapshot.forEach(docSnap => {
+        const data = { ...docSnap.data(), _fsId: docSnap.id };
+        if (data.createdAt?.seconds) data.createdAt = data.createdAt.seconds * 1000;
+        if (!data.id) data.id = uid();
+        firestoreDocMap[data.id] = docSnap.id;
+        firestoreOrders.push(data);
+        if (initialLoadDone && !knownOrderIds.has(data.id)) {
+          incomingNew.push(data);
+        }
+        knownOrderIds.add(data.id);
+      });
+
+      const localOnly = loadLocalOrders().filter(o => !firestoreDocMap[o.id]);
+      state.orders = [...firestoreOrders, ...localOnly];
+      renderAll();
+
+      if (!initialLoadDone) {
+        initialLoadDone = true;
+        setSyncStatus('live', `Live · ${firestoreOrders.length} orders`);
+      } else if (incomingNew.length) {
+        incomingNew.forEach(o => handleNewOrderAlert(o));
+      }
+    }, err => {
+      console.warn('Firestore listener error:', err);
+      setSyncStatus('error', 'Firestore error — using local');
+      fallbackToLocal();
+    });
+  } catch (err) {
+    console.warn('Firebase init failed:', err);
+    setSyncStatus('error', 'Offline — local only');
+    fallbackToLocal();
+  }
+}
+
+function handleNewOrderAlert(order) {
+  const togNew = document.getElementById('tog-new-order');
+  const togWA  = document.getElementById('tog-whatsapp');
+  const notifOn = togNew ? togNew.classList.contains('on') : true;
+  const waOn    = togWA  ? togWA.classList.contains('on')  : false;
+
+  toast(`🛍 New order from ${order.firstName} ${order.lastName} — ${(order.total||0).toLocaleString()} L.E`, 'ok');
+
+  if (notifOn) {
+    playBeep();
+    if (Notification.permission === 'granted') {
+      const n = new Notification('Se7en — New Order 🛍', {
+        body: `${order.firstName} ${order.lastName} · ${(order.total||0).toLocaleString()} L.E\n${(order.items||[]).map(i=>i.productName).join(', ')}`,
+        icon: 'assets/Seven7.png',
+        tag: order.id
+      });
+      n.onclick = () => { window.focus(); openDetail(order.id); n.close(); };
+    } else if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+
+  if (waOn) sendWhatsAppConfirmation(order);
+}
+
+function playBeep() {
+  try {
+    const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) { /* audio blocked */ }
+}
+
+function buildWhatsAppURL(order) {
+  const inputVal  = (document.getElementById('wa-phone')?.value || '').trim();
+  const waPhone   = (inputVal || localStorage.getItem('se7en_wa_phone') || '').replace(/[\s\-()]/g, '');
+  if (!waPhone) return null;
+  const itemsList = (order.items||[])
+    .map(i => `  • ${i.productName}${i.color?' / '+i.color:''}${i.size?' / '+i.size:''} × ${i.quantity||1}`)
+    .join('\n');
+  const msg =
+`Order confirmation!
+New Se7en Order — ${order.id}
+
+ Customer:
+Name: ${order.firstName} ${order.lastName}
+Phone: ${order.phone||'—'}
+Email: ${order.email||'—'}
+
+Items:
+${itemsList}
+
+Pricing:
+Subtotal: ${(order.subtotal||0).toLocaleString()} L.E${order.discountAmt?'\nDiscount: −'+(order.discountAmt).toLocaleString()+' L.E':''}
+Shipping: ${order.shipping===0?'Free':(order.shipping||65).toLocaleString()+' L.E'}
+*Total: ${(order.total||0).toLocaleString()} L.E*
+
+Address:
+${order.address||'—'}, ${order.city||'—'}, ${order.country||'—'}${order.notes?'\n\n📝 Notes: '+order.notes:''}`;
+
+  const num = waPhone.startsWith('+') ? waPhone.slice(1) : waPhone;
+  return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+}
+
+function sendWhatsAppConfirmation(order) {
+  const inputVal = (document.getElementById('wa-phone')?.value || '').trim();
+  const waPhone  = inputVal || localStorage.getItem('se7en_wa_phone') || '';
+  if (!waPhone) {
+    toast('⚠ Add your WhatsApp number in Settings → Notifications', 'err');
+    return;
+  }
+  const url = buildWhatsAppURL(order);
+  if (!url) return;
+
+  const banner  = document.getElementById('wa-banner');
+  const card    = document.createElement('div');
+  card.className = 'wa-card';
+  card.dataset.orderId = order.id;
+  card.innerHTML = `
+    <div class="wa-card-top">
+      <div class="wa-card-title">💬 New Order — Send WhatsApp?</div>
+      <button class="wa-card-dismiss" data-wa-dismiss="${order.id}" title="Dismiss">✕</button>
+    </div>
+    <div class="wa-card-customer">
+      <strong>${order.firstName} ${order.lastName}</strong><br>
+      ${(order.items||[]).map(i=>i.productName).join(', ')}<br>
+      <span style="color:#25D366;font-weight:700">${(order.total||0).toLocaleString()} L.E</span>
+    </div>
+    <button class="wa-card-btn" data-wa-send="${order.id}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Send on WhatsApp
+    </button>`;
+
+  banner.appendChild(card);
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('show')));
+  setTimeout(() => dismissWaBanner(card), 60000);
+}
+
+function dismissWaBanner(card) {
+  if (!card) return;
+  card.classList.remove('show');
+  setTimeout(() => card.remove(), 350);
+}
+
+function openWhatsAppDirect(order) {
+  const inputVal = (document.getElementById('wa-phone')?.value || '').trim();
+  const waPhone  = inputVal || localStorage.getItem('se7en_wa_phone') || '';
+  if (!waPhone) {
+    toast('⚠ Add your WhatsApp number in Settings → Notifications', 'err');
+    return;
+  }
+  const url = buildWhatsAppURL(order);
+  if (url) window.open(url, '_blank', 'noopener');
+}
+
+function setSyncStatus(type, label) {
+  document.getElementById('sync-dot').className = 'sync-dot ' + type;
+  document.getElementById('sync-label').textContent = label;
+}
+
+function fallbackToLocal() {
+  state.orders = loadLocalOrders();
+  state.firestoreReady = false;
+  renderAll();
+}
+
+function loadLocalOrders() {
+  try {
+    const raw = localStorage.getItem(LS_ORDERS);
+    if (!raw) return [];
+    const p = JSON.parse(raw);
+    return Array.isArray(p) ? p : (p.orders || []);
+  } catch { return []; }
+}
+function persistLocal() {
+  localStorage.setItem(LS_ORDERS, JSON.stringify({ orders: state.orders }));
+}
+function loadProds() {
+  try {
+    const raw = localStorage.getItem(LS_PRODS);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state.prods = parsed.prods || [];
+      if (!state.prods.length) initProds();
+    } else {
+      initProds();
+    }
+  } catch { initProds(); }
+}
+function persistProds() {
+  localStorage.setItem(LS_PRODS, JSON.stringify({ prods: state.prods }));
+}
+
+async function fsAddOrder(order) {
+  if (!state.firestoreReady) return null;
+  try {
+    const docRef = await addDoc(ordersCol, order);
+    firestoreDocMap[order.id] = docRef.id;
+    return docRef.id;
+  } catch(e) { console.warn('fsAddOrder', e); return null; }
+}
+async function fsUpdateOrder(order) {
+  const fsId = firestoreDocMap[order.id];
+  if (!state.firestoreReady || !fsId) return;
+  try { await updateDoc(doc(db, 'orders', fsId), order); } catch(e) { console.warn('fsUpdateOrder', e); }
+}
+async function fsDeleteOrder(localId) {
+  const fsId = firestoreDocMap[localId];
+  if (!state.firestoreReady || !fsId) return;
+  try { await deleteDoc(doc(db, 'orders', fsId)); } catch(e) { console.warn('fsDeleteOrder', e); }
+}
+
+function renderAll() {
+  updateMetrics();
+  renderRecent();
+  renderOrders();
+  renderProds();
+  renderCustomers();
+  renderCharts();
+  updateNavBadge();
+}
+
+function updateNavBadge() {
+  const n  = state.orders.filter(o => o.status === 'New').length;
+  const el = document.getElementById('nb-orders');
+  el.textContent = n;
+  el.style.display = n ? 'inline-flex' : 'none';
+}
+
+function updateMetrics() {
+  const active = state.orders.filter(o => o.status !== 'Cancelled');
+  const rev    = active.reduce((a, b) => a + (b.total || 0), 0);
+  const wk     = Date.now() - 7 * 86400000;
+  const wrev   = active.filter(o => o.createdAt > wk).reduce((a, b) => a + (b.total || 0), 0);
+  const aov    = active.length ? Math.round(rev / active.length) : 0;
+  const pend   = state.orders.filter(o => ['New','Processing'].includes(o.status)).length;
+
+  document.getElementById('m-rev').textContent    = rev.toLocaleString() + ' L.E';
+  document.getElementById('m-rev-f').textContent  = wrev.toLocaleString() + ' L.E this week';
+  document.getElementById('m-total').textContent  = state.orders.length;
+  document.getElementById('m-total-f').textContent = active.length + ' fulfilled';
+  document.getElementById('m-aov').textContent    = aov.toLocaleString() + ' L.E';
+  document.getElementById('m-action').textContent = pend;
+}
+
+function renderRecent() {
+  const rows = [...state.orders].sort((a, b) => b.createdAt - a.createdAt).slice(0, 5);
+  const tb   = document.getElementById('recent-tbody');
+  if (!rows.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="6">No orders yet — create one or load sample data</td></tr>';
+    return;
+  }
+  tb.innerHTML = rows.map(o => `<tr>
+    <td><span class="link-id" data-detail="${o.id}">${o.id}</span></td>
+    <td style="overflow:hidden;text-overflow:ellipsis">${o.firstName} ${o.lastName}</td>
+    <td>${srcBadge(o.source)}</td>
+    <td class="mono">${(o.total||0).toLocaleString()} L.E</td>
+    <td>${badge(o.status)}</td>
+    <td style="color:var(--muted2)">${fmt(o.createdAt)}</td>
+  </tr>`).join('');
+}
+
+function renderOrders() {
+  const q    = (document.getElementById('ord-search')?.value || '').toLowerCase();
+  let list   = state.orders.filter(o => {
+    const ms = currentFilter === 'all' || o.status === currentFilter;
+    const mq = !q || (o.firstName + ' ' + o.lastName + (o.email || '') + o.id).toLowerCase().includes(q);
+    return ms && mq;
+  }).sort((a, b) => b.createdAt - a.createdAt);
+
+  const total = list.length;
+  const pages = Math.max(1, Math.ceil(total / PER));
+  if (ordPage > pages) ordPage = 1;
+  const sl = list.slice((ordPage - 1) * PER, ordPage * PER);
+  const tb = document.getElementById('orders-tbody');
+
+  if (!sl.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="7">No orders found</td></tr>';
+  } else {
+    tb.innerHTML = sl.map(o => `<tr>
+      <td><span class="link-id" data-detail="${o.id}">${o.id}</span></td>
+      <td style="overflow:hidden;text-overflow:ellipsis">${o.firstName} ${o.lastName}<br><span style="font-size:10px;color:var(--muted)">${o.email||''}</span></td>
+      <td style="overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${(o.items||[]).map(i=>i.productName+(i.color?' / '+i.color:'')).join(', ')}</td>
+      <td class="mono">${(o.total||0).toLocaleString()} L.E</td>
+      <td><select class="status-sel" data-updid="${o.id}">${STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td>
+      <td style="color:var(--muted2)">${fmt(o.createdAt)}</td>
+      <td><div style="display:flex;gap:5px">
+        <button class="act-btn" data-editorder="${o.id}">Edit</button>
+        <button class="act-btn danger" data-delorder="${o.id}">🗑</button>
+      </div></td>
+    </tr>`).join('');
+  }
+
+  document.getElementById('pg-info').textContent = total + ' order' + (total !== 1 ? 's' : '');
+
+  let ph = '';
+  for (let i = 1; i <= pages; i++) {
+    ph += `<button class="pgbtn ${i === ordPage ? 'cur' : ''}" data-pg="${i}">${i}</button>`;
+  }
+  document.getElementById('pg-btns').innerHTML = ph;
+}
+
+function renderProds() {
+  const g    = document.getElementById('prod-grid');
+  const cnt  = document.getElementById('prod-count');
+  if (cnt) cnt.textContent = `(${state.prods.length} products)`;
+  if (!state.prods.length) {
+    g.innerHTML = '<div style="color:var(--muted);padding:40px;text-align:center;grid-column:span 3">No products yet</div>';
+    return;
+  }
+  g.innerHTML = state.prods.map(p => `<div class="pcard">
+    <div>
+      <div class="pname">${p.name}</div>
+      <div class="pcat">${p.category}${p.subcategory ? ` · ${p.subcategory}` : ''}</div>
+    </div>
+    <div class="pprice">${(p.price||0).toLocaleString()} L.E</div>
+    <span class="pstock ${(p.stock||0) > 8 ? 'ps-ok' : 'ps-low'}">${p.stock||0} in stock</span>
+    <div class="pbtns">
+      <button class="pbtn" data-editprod="${p.id}">✏ Edit</button>
+      <button class="pbtn" style="flex:0;padding:7px 13px" data-delprod="${p.id}">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+function renderCustomers() {
+  const q  = (document.getElementById('cust-search')?.value || '').toLowerCase();
+  const cm = {};
+  state.orders.forEach(o => {
+    const key = o.email || (o.firstName + o.lastName);
+    if (!cm[key]) cm[key] = { name:`${o.firstName} ${o.lastName}`, email:o.email||'—', phone:o.phone||'—', city:o.city||'—', orders:0, spent:0 };
+    if (o.status !== 'Cancelled') { cm[key].orders++; cm[key].spent += (o.total || 0); }
+  });
+  let cs = Object.values(cm).filter(c => !q || (c.name + c.email).toLowerCase().includes(q)).sort((a, b) => b.spent - a.spent);
+  const tb = document.getElementById('cust-tbody');
+  if (!cs.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No customers yet</td></tr>'; return; }
+  tb.innerHTML = cs.map(c => `<tr>
+    <td style="font-weight:600;overflow:hidden;text-overflow:ellipsis">${c.name}</td>
+    <td style="font-size:11px;color:var(--muted2);overflow:hidden;text-overflow:ellipsis">${c.email}</td>
+    <td style="font-size:11px;overflow:hidden;text-overflow:ellipsis">${c.phone}</td>
+    <td class="mono">${c.orders}</td>
+    <td class="mono" style="color:var(--green)">${c.spent.toLocaleString()} L.E</td>
+    <td style="font-size:11px;color:var(--muted2);overflow:hidden;text-overflow:ellipsis">${c.city}</td>
+  </tr>`).join('');
+}
+
+function renderCharts() {
+  const days = 14, now = new Date(), pts = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now); d.setDate(d.getDate() - i);
+    pts.push({ lbl: d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}), v: 0 });
+  }
+  state.orders.filter(o => o.status !== 'Cancelled').forEach(o => {
+    const diff = Math.round((now - new Date(o.createdAt)) / 86400000);
+    if (diff < days) pts[days - 1 - diff].v += (o.total || 0);
+  });
+
+  const rctx = document.getElementById('rev-chart')?.getContext('2d');
+  if (!rctx) return;
+  if (rChart) rChart.destroy();
+  rChart = new Chart(rctx, {
+    type: 'line',
+    data: {
+      labels: pts.map(p => p.lbl),
+      datasets: [{
+        data: pts.map(p => p.v),
+        borderColor: '#f5f5f5',
+        backgroundColor: 'rgba(245,245,245,0.06)',
+        fill: true, tension: 0.45, pointRadius: 3,
+        pointBackgroundColor: '#f5f5f5', borderWidth: 1.5
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#1a1a1a',borderColor:'rgba(255,255,255,0.12)',borderWidth:1,
+          titleColor:'#f5f5f5',bodyColor:'rgba(255,255,255,0.6)',
+          callbacks:{label:c=>c.raw.toLocaleString()+' L.E'}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},maxTicksLimit:7}},
+        y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},callback:v=>v.toLocaleString()}}
+      }
+    }
+  });
+
+  const sc = {}; STATUSES.forEach(s => sc[s] = 0);
+  state.orders.forEach(o => sc[o.status] = (sc[o.status] || 0) + 1);
+  const sctx = document.getElementById('status-chart')?.getContext('2d');
+  if (!sctx) return;
+  if (sChart) sChart.destroy();
+  sChart = new Chart(sctx, {
+    type: 'doughnut',
+    data: {
+      labels: STATUSES,
+      datasets: [{ data: STATUSES.map(s => sc[s]), backgroundColor: SCOLORS, borderWidth: 0, hoverOffset: 4 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'72%' }
+  });
+
+  const leg = document.getElementById('status-legend');
+  if (leg) leg.innerHTML = STATUSES.map((s, i) =>
+    `<div class="leg-item"><div class="leg-dot" style="background:${SCOLORS[i]}"></div>${s} <span class="mono" style="font-size:10px">${sc[s]}</span></div>`
+  ).join('');
+}
+
+function nav(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('on'));
+  const pageEl = document.getElementById('page-' + p);
+  const navEl  = document.getElementById('nav-' + p);
+  if (pageEl) pageEl.classList.add('on');
+  if (navEl)  navEl.classList.add('on');
+  const titles = { overview:'Overview', orders:'Orders', products:'Products', customers:'Customers', settings:'Settings' };
+  document.getElementById('page-title').textContent = titles[p] || p;
+  if (p === 'overview') renderCharts();
+}
+
+function setFilterChip(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  ordPage = 1;
+  renderOrders();
+}
+
+async function updStatus(id, s) {
+  const o = state.orders.find(x => x.id === id);
+  if (!o) return;
+  o.status = s;
+  persistLocal();
+  await fsUpdateOrder(o);
+  updateMetrics(); renderCharts(); renderRecent(); updateNavBadge();
+  toast('Status → ' + s, 'ok');
+}
+
+async function delOrder(id) {
+  if (!confirm('Delete this order?')) return;
+  await fsDeleteOrder(id);
+  state.orders = state.orders.filter(o => o.id !== id);
+  persistLocal(); renderAll();
+  toast('Order deleted', 'ok');
+}
+
+// ── FIX: Color now shown before size in detail modal ─────────────────
+function openDetail(id) {
+  const o = state.orders.find(x => x.id === id);
+  if (!o) return;
+  document.getElementById('dm-title').textContent = 'Order ' + o.id;
+  const si    = { New:0, Processing:1, Shipped:2, Delivered:3, Cancelled:-1 }[o.status] ?? 0;
+  const steps = ['New','Processing','Shipped','Delivered'];
+  const tl = steps.map((s, i) => {
+    const done   = si > i && o.status !== 'Cancelled';
+    const active = o.status === s;
+    return `<div class="tstep"><div class="tdot ${done?'done':''} ${active?'active':''}">${done?'✓':''}</div><div class="tlbl">${s}</div></div>`;
+  }).join('');
+
+  document.getElementById('dm-body').innerHTML = `
+    ${o.status === 'Cancelled' ? `<div style="background:rgba(224,79,79,0.1);border:1px solid rgba(224,79,79,0.25);border-radius:10px;padding:10px 14px;color:var(--red);font-size:12px;margin-bottom:14px">🚫 Order cancelled</div>` : ''}
+    <div style="margin-bottom:10px">${srcBadge(o.source||'admin')} <span style="font-size:11px;color:var(--muted);margin-left:4px">Placed ${fmt(o.createdAt)}</span></div>
+    <div class="timeline">${tl}</div>
+    <div class="detail-grid">
+      <div class="dcard"><div class="dcard-lbl">Customer</div>
+        <div class="dr"><span class="dk">Name</span><span>${o.firstName} ${o.lastName}</span></div>
+        <div class="dr"><span class="dk">Email</span><span style="font-size:11px">${o.email||'—'}</span></div>
+        <div class="dr"><span class="dk">Phone</span><span>${o.phone||'—'}</span></div>
+      </div>
+      <div class="dcard"><div class="dcard-lbl">Shipping</div>
+        <div class="dr"><span class="dk">Address</span><span style="font-size:11px">${o.address||'—'}</span></div>
+        <div class="dr"><span class="dk">City</span><span>${o.city||'—'}</span></div>
+        <div class="dr"><span class="dk">Country</span><span>${o.country||'—'}</span></div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-lbl">Items</div>
+      ${(o.items||[]).map(it => `<div class="item-line"><span>${it.productName} <span style="color:var(--muted);font-size:10px">${it.color ? '/ '+it.color : ''} / ${it.size||''}</span></span><span class="mono">${(it.price||0).toLocaleString()} L.E</span></div>`).join('')}
+      <div class="total-blk">
+        <div class="tot-row"><span>Subtotal</span><span class="mono">${(o.subtotal||0).toLocaleString()} L.E</span></div>
+        ${o.discountAmt ? `<div class="tot-row"><span>Discount</span><span class="mono" style="color:var(--green)">−${o.discountAmt.toLocaleString()} L.E</span></div>` : ''}
+        <div class="tot-row"><span>Shipping</span><span class="mono">${o.shipping===0?'Free':(o.shipping||65).toLocaleString()+' L.E'}</span></div>
+        <div class="tot-row grand"><span>Total</span><span class="mono">${(o.total||0).toLocaleString()} L.E</span></div>
+      </div>
+    </div>
+    ${o.notes ? `<div style="font-size:11px;color:var(--muted2);font-style:italic;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:10px;margin-top:10px;border:1px solid var(--border)">"${o.notes}"</div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+      <button class="btn-ghost" style="flex:1" data-editfromdetail="${o.id}">✏ Edit order</button>
+      <button class="btn-ghost" style="flex:0;padding:9px 14px;border-color:rgba(37,211,102,0.3);color:#29c76f" data-wafromdetail="${o.id}" title="Send WhatsApp confirmation">💬</button>
+      <button class="btn-ghost" style="flex:0;padding:9px 16px;border-color:rgba(224,79,79,0.3);color:var(--red)" data-delfromdetail="${o.id}">🗑</button>
+    </div>`;
+  openModal('detail-modal');
+}
+
+function addItemRow(item = null) {
+  const opts = state.prods.map(p =>
+    `<option value="${p.id}" data-price="${p.price}" ${item && item.productId === p.id ? 'selected' : ''}>${p.name}${p.subcategory?' ('+p.subcategory+')':''} — ${(p.price||0).toLocaleString()} L.E</option>`
+  ).join('');
+  const row = document.createElement('div');
+  row.className = 'item-row-form';
+  row.innerHTML = `
+    <select class="ir-prod">${opts}</select>
+    <input type="text" class="ir-color" placeholder="Color" value="${item?.color||''}">
+    <select class="ir-size">
+      <option ${item?.size==='S'?'selected':''}>S</option>
+      <option ${!item||item.size==='M'?'selected':''}>M</option>
+      <option ${item?.size==='L'?'selected':''}>L</option>
+      <option ${item?.size==='XL'?'selected':''}>XL</option>
+      <option ${item?.size==='XXL'?'selected':''}>XXL</option>
+    </select>
+    <input type="number" class="ir-qty" min="1" value="${item?.quantity||1}">
+    <button type="button" class="ir-remove">✕</button>`;
+  row.querySelector('.ir-remove').addEventListener('click', () => row.remove());
+  document.getElementById('item-adder').appendChild(row);
+}
+
+function collectItems() {
+  return Array.from(document.querySelectorAll('.item-row-form')).map(row => {
+    const pid = row.querySelector('.ir-prod').value;
+    const p   = state.prods.find(x => x.id === pid) || { name: 'Unknown', price: 0 };
+    return {
+      productId: pid,
+      productName: p.name,
+      price: p.price,
+      color: (row.querySelector('.ir-color').value || '').trim(),
+      size: row.querySelector('.ir-size').value,
+      quantity: parseInt(row.querySelector('.ir-qty').value) || 1
+    };
+  });
+}
+
+function openNewOrder() {
+  editOrderId = null;
+  document.getElementById('om-title').textContent = 'New order';
+  ['o-fn','o-ln','o-em','o-ph','o-addr','o-notes'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('o-city').value     = '';
+  document.getElementById('o-ctry').value     = 'Egypt';
+  document.getElementById('o-status').value   = 'New';
+  document.getElementById('o-discount').value = '0';
+  document.getElementById('item-adder').innerHTML = '';
+  addItemRow();
+  openModal('order-modal');
+}
+
+function openEditOrder(id) {
+  const o = state.orders.find(x => x.id === id);
+  if (!o) return;
+  editOrderId = id;
+  document.getElementById('om-title').textContent = 'Edit order';
+  document.getElementById('o-fn').value    = o.firstName || '';
+  document.getElementById('o-ln').value    = o.lastName  || '';
+  document.getElementById('o-em').value    = o.email     || '';
+  document.getElementById('o-ph').value    = o.phone     || '';
+  document.getElementById('o-addr').value  = o.address   || '';
+  document.getElementById('o-city').value  = o.city      || '';
+  document.getElementById('o-ctry').value  = o.country   || 'Egypt';
+  document.getElementById('o-notes').value = o.notes     || '';
+  document.getElementById('o-status').value = o.status   || 'New';
+  document.getElementById('o-discount').value = o.discountAmt || 0;
+  document.getElementById('item-adder').innerHTML = '';
+  (o.items || []).forEach(it => addItemRow(it));
+  openModal('order-modal');
+}
+
+async function saveOrder() {
+  const items      = collectItems();
+  const sub        = items.reduce((a, b) => a + b.price * b.quantity, 0);
+  const ship       = sub >= 1500 ? 0 : 65;
+  const discountAmt = Math.max(0, parseFloat(document.getElementById('o-discount').value) || 0);
+  const total      = Math.max(0, sub - discountAmt + ship);
+  const orig       = editOrderId ? state.orders.find(x => x.id === editOrderId) : null;
+  const o = {
+    id:          editOrderId || uid(),
+    firstName:   document.getElementById('o-fn').value.trim()   || 'Unknown',
+    lastName:    document.getElementById('o-ln').value.trim()   || '',
+    email:       document.getElementById('o-em').value.trim(),
+    phone:       document.getElementById('o-ph').value.trim(),
+    address:     document.getElementById('o-addr').value.trim(),
+    city:        document.getElementById('o-city').value.trim(),
+    country:     document.getElementById('o-ctry').value.trim() || 'Egypt',
+    notes:       document.getElementById('o-notes').value.trim(),
+    status:      document.getElementById('o-status').value,
+    source:      orig?.source || 'admin',
+    items, subtotal: sub, discountAmt, shipping: ship, total,
+    createdAt: orig ? orig.createdAt : Date.now()
+  };
+
+  if (editOrderId) {
+    state.orders = state.orders.map(x => x.id === editOrderId ? o : x);
+    await fsUpdateOrder(o);
+  } else {
+    state.orders.unshift(o);
+    await fsAddOrder(o);
+  }
+  persistLocal();
+  closeModal('order-modal');
+  renderAll();
+  toast(editOrderId ? 'Order updated' : 'Order created', 'ok');
+  if (!editOrderId) {
+    const togWA = document.getElementById('tog-whatsapp');
+    if (togWA?.classList.contains('on')) sendWhatsAppConfirmation(o);
+  }
+}
+
+function initProds() {
+  state.prods = [
+    { id:'tshirt-box-1',  name:'Box Fit Tee — Original', category:'T-Shirt', subcategory:'Box Fit', price:550, stock:20, description:'Original Box Fit T-Shirt, 100% cotton. Colors: White, Black, Gray, Burgundy.' },
+    { id:'tshirt-box-new-1', name:'Box Fit Tee — New Drop', category:'T-Shirt', subcategory:'Box Fit', price:550, stock:20, description:'New Box Fit drop with front/back product imagery. Sizes: M, L, XL, XXL. Colors: White, Navy Blue, Dark Gray, Burgundy.' },
+    { id:'tshirt-over-1', name:'Oversize Fit Tee — Original', category:'T-Shirt', subcategory:'Oversize Fit', price:600, stock:15, description:'Original Oversize Fit unisex tee, 100% cotton. Colors: White, Black, Light Gray, Burgundy, Baby Blue.' },
+    { id:'tshirt-over-new-1', name:'Oversize Fit Tee — New Drop', category:'T-Shirt', subcategory:'Oversize Fit', price:600, stock:15, description:'New Oversize Fit drop with front/back product imagery. Sizes: S, M, L, XL, XXL. Colors: White, Black, Dark Gray, Navy Blue, Burgundy.' },
+    { id:'tshirt-reg-1',  name:'Regular Fit Tee',   category:'T-Shirt', subcategory:'Regular',      price:550,  stock:18, description:'Classic everyday t-shirt with a clean fit, soft fabric, 100% cotton and all-day comfort. Colors: White, Black, Navy Blue, Burgundy.' },
+    { id:'tshirt-1', name:'Core T-Shirt', category:'T-Shirt', subcategory:'Box Fit', price:68, stock:20, description:'Original Core T-Shirt with a minimal boxy fit. Sizes: M, L, XL, XXL.' },
+    { id:'tshirt-2', name:'Contour Tee', category:'T-Shirt', subcategory:'Regular', price:74, stock:20, description:'Original Contour Tee with soft structure and tailored proportions. Sizes: M, L, XL, XXL.' },
+    { id:'Pants-1',       name:'Sweet Pants',    category:'Pants',   subcategory:'Wide Leg',     price:600,  stock:20, description:'Premium heavyweight wide-leg pants with a clean oversized silhouette and refined monochrome detailing. Colors: White, Gray, Black.' },
+  ];
+  persistProds();
+}
+
+function openNewProduct() {
+  editProdId = null;
+  document.getElementById('pm-title').textContent = 'Add product';
+  ['p-name','p-price','p-stock','p-desc','p-subcat','p-id'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('p-cat').value = 'T-Shirt';
+  openModal('prod-modal');
+}
+
+function openEditProd(id) {
+  const p = state.prods.find(x => x.id === id);
+  if (!p) return;
+  editProdId = id;
+  document.getElementById('pm-title').textContent = 'Edit product';
+  document.getElementById('p-name').value   = p.name;
+  document.getElementById('p-cat').value    = p.category;
+  document.getElementById('p-subcat').value = p.subcategory || '';
+  document.getElementById('p-id').value     = p.id;
+  document.getElementById('p-price').value  = p.price;
+  document.getElementById('p-stock').value  = p.stock;
+  document.getElementById('p-desc').value   = p.description || '';
+  openModal('prod-modal');
+}
+
+function saveProd() {
+  const nameVal = document.getElementById('p-name').value.trim();
+  if (!nameVal) { toast('Product name is required', 'err'); return; }
+  const newId = editProdId || (document.getElementById('p-id').value.trim() || ('prod-' + Date.now()));
+  const p = {
+    id:          newId,
+    name:        nameVal,
+    category:    document.getElementById('p-cat').value,
+    subcategory: document.getElementById('p-subcat').value.trim(),
+    price:       parseFloat(document.getElementById('p-price').value) || 0,
+    stock:       parseInt(document.getElementById('p-stock').value)   || 0,
+    description: document.getElementById('p-desc').value.trim()
+  };
+  if (editProdId) {
+    state.prods = state.prods.map(x => x.id === editProdId ? p : x);
+  } else {
+    state.prods.push(p);
+  }
+  persistProds(); closeModal('prod-modal'); renderProds();
+  toast(editProdId ? 'Product updated' : 'Product added', 'ok');
+}
+
+function delProd(id) {
+  if (!confirm('Delete this product?')) return;
+  state.prods = state.prods.filter(p => p.id !== id);
+  persistProds(); renderProds();
+  toast('Product deleted', 'ok');
+}
+
+function exportCSV() {
+  const rows = [['Order ID','First Name','Last Name','Email','Phone','City','Country','Source','Items','Subtotal','Discount','Shipping','Total','Status','Date']];
+  state.orders.forEach(o => rows.push([
+    o.id, o.firstName, o.lastName, o.email||'', o.phone||'', o.city||'', o.country||'', o.source||'admin',
+    (o.items||[]).map(i => i.productName + (i.color?' / '+i.color:'') + ' x' + i.quantity).join(';'),
+    o.subtotal||0, o.discountAmt||0, o.shipping||0, o.total||0, o.status, fmt(o.createdAt)
+  ]));
+  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(',')).join('\n');
+  const a   = document.createElement('a');
+  a.href    = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'se7en_orders_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('CSV exported', 'ok');
+}
+
+function clearLocalOrders() {
+  if (!confirm('This clears locally cached orders only (not Firestore). Continue?')) return;
+  state.orders = [];
+  persistLocal();
+  renderAll();
+  toast('Local cache cleared', 'ok');
+}
+
+async function forceSyncFromFirestore() {
+  if (!state.firestoreReady) { toast('Firestore not connected', 'err'); return; }
+  try {
+    const snap = await getDocs(query(ordersCol, orderBy('createdAt', 'desc')));
+    const orders = [];
+    firestoreDocMap = {};
+    snap.forEach(docSnap => {
+      const data = { ...docSnap.data(), _fsId: docSnap.id };
+      if (data.createdAt?.seconds) data.createdAt = data.createdAt.seconds * 1000;
+      if (!data.id) data.id = uid();
+      firestoreDocMap[data.id] = docSnap.id;
+      orders.push(data);
+    });
+    state.orders = orders;
+    persistLocal(); renderAll();
+    toast(`Synced ${orders.length} orders from Firestore`, 'ok');
+  } catch(e) {
+    console.warn('forceSyncFromFirestore error:', e);
+    toast('Sync failed', 'err');
+  }
+}
+
+async function seedDemo() {
+  const ns = [
+    ['Omar','Khalil','omar.k@mail.com','+20 100 123 4567','Cairo'],
+    ['Nour','Ibrahim','nour.i@mail.com','+20 111 987 6543','Alexandria'],
+    ['Yasmine','Farouk','yas.f@mail.com','+20 122 456 7890','Giza']
+  ];
+  const ss = ['New','Processing','Delivered'];
+  const ps = [['tshirt-box-1'],['tshirt-reg-1'],['tshirt-over-1','Pants-1']];
+  const now = Date.now();
+  for (let i = 0; i < ns.length; i++) {
+    const n = ns[i];
+    const items = ps[i].map(pid => {
+      const p = state.prods.find(x => x.id === pid) || { name:'Item', price:500 };
+      return { productId:pid, productName:p.name, price:p.price, size:'M', quantity:1 };
+    });
+    const sub  = items.reduce((a, b) => a + b.price * b.quantity, 0);
+    const ship = sub >= 1500 ? 0 : 65;
+    const o = {
+      id: uid(), firstName:n[0], lastName:n[1], email:n[2], phone:n[3],
+      city:n[4], country:'Egypt', address:'123 Sample St',
+      status: ss[i], source:'admin', items,
+      subtotal:sub, shipping:ship, total:sub+ship,
+      notes:'', createdAt: now - (i * 86400000 * 2)
+    };
+    state.orders.unshift(o);
+    await fsAddOrder(o);
+  }
+  persistLocal(); renderAll();
+  toast('Sample data loaded', 'ok');
+}
+
+function openModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+function toast(msg, type = 'ok') {
+  const wrap = document.getElementById('toast-wrap');
+  const el   = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<span class="ti">${type === 'ok' ? '✓' : '✗'}</span>${msg}`;
+  wrap.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 320); }, 2800);
+}
+
+// ── Event delegation ──────────────────────────────────────────────────
+document.addEventListener('click', async e => {
+  const t = e.target;
+
+  if (t.dataset.toggle !== undefined && t.classList.contains('tog')) {
+    t.classList.toggle('on');
+    t.classList.toggle('off');
+    const revealsId = t.dataset.reveals;
+    if (revealsId) {
+      const panel = document.getElementById(revealsId);
+      if (panel) panel.style.display = t.classList.contains('on') ? 'flex' : 'none';
+    }
+    if (t.id === 'tog-new-order' && t.classList.contains('on') && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+    return;
+  }
+
+  if (t.dataset.waSend) {
+    const order = state.orders.find(o => o.id === t.dataset.waSend);
+    if (order) {
+      const url = buildWhatsAppURL(order);
+      if (url) window.open(url, '_blank', 'noopener');
+    }
+    dismissWaBanner(t.closest('.wa-card'));
+    return;
+  }
+
+  if (t.dataset.waDismiss) { dismissWaBanner(t.closest('.wa-card')); return; }
+  if (t.dataset.wafromdetail) { const order = state.orders.find(o => o.id === t.dataset.wafromdetail); if (order) openWhatsAppDirect(order); return; }
+
+  if (t.closest('.nav-item')) { const p = t.closest('.nav-item').dataset.p; if (p) nav(p); return; }
+  if (t.dataset.detail) { openDetail(t.dataset.detail); return; }
+  if (t.dataset.pg) { ordPage = parseInt(t.dataset.pg); renderOrders(); return; }
+  if (t.closest('#filter-chips .chip')) { setFilterChip(t.dataset.f, t); return; }
+
+  if (t.id === 'btn-export' || t.id === 'btn-export-2') { exportCSV(); return; }
+  if (t.id === 'btn-new-order') { openNewOrder(); return; }
+  if (t.id === 'btn-add-prod')  { openNewProduct(); return; }
+  if (t.id === 'btn-add-item-row') { addItemRow(); return; }
+  if (t.id === 'btn-save-order') { await saveOrder(); return; }
+  if (t.id === 'btn-save-prod')  { saveProd(); return; }
+  if (t.id === 'btn-save-wa')    { saveWaPhone(); return; }
+  if (t.id === 'btn-seed')       { await seedDemo(); return; }
+  if (t.id === 'btn-force-sync') { await forceSyncFromFirestore(); return; }
+  if (t.id === 'btn-clear-local') { clearLocalOrders(); return; }
+
+  if (t.id === 'om-close' || t.id === 'om-cancel') { closeModal('order-modal'); return; }
+  if (t.id === 'dm-close') { closeModal('detail-modal'); return; }
+  if (t.id === 'pm-close' || t.id === 'pm-cancel') { closeModal('prod-modal'); return; }
+
+  if (t.dataset.editorder) { openEditOrder(t.dataset.editorder); return; }
+  if (t.dataset.delorder)  { await delOrder(t.dataset.delorder); return; }
+  if (t.dataset.editprod)  { openEditProd(t.dataset.editprod); return; }
+  if (t.dataset.delprod)   { delProd(t.dataset.delprod); return; }
+  if (t.dataset.editfromdetail) { closeModal('detail-modal'); openEditOrder(t.dataset.editfromdetail); return; }
+  if (t.dataset.delfromdetail)  { closeModal('detail-modal'); await delOrder(t.dataset.delfromdetail); return; }
+  if (t.classList.contains('modal-overlay')) { t.classList.remove('open'); return; }
+});
+
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.dataset.updid) { await updStatus(t.dataset.updid, t.value); return; }
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'ord-search')  { renderOrders(); return; }
+  if (e.target.id === 'cust-search') { renderCustomers(); return; }
+});
+
+function saveWaPhone() {
+  const input  = document.getElementById('wa-phone');
+  const status = document.getElementById('wa-phone-status');
+  const val    = (input?.value || '').trim();
+  if (!val) {
+    if (status) { status.textContent = '⚠ Please enter a number first.'; status.style.color = 'var(--amber)'; }
+    return;
+  }
+  if (!/^\+\d{10,15}$/.test(val.replace(/\s/g, ''))) {
+    if (status) { status.textContent = '⚠ Format must be +[country code][number], e.g. +201012345678'; status.style.color = 'var(--amber)'; }
+    return;
+  }
+  localStorage.setItem('se7en_wa_phone', val);
+  localStorage.setItem('se7en_wa_enabled', 'true');
+  if (status) { status.textContent = '✓ Saved! WhatsApp confirmations are active.'; status.style.color = 'var(--green)'; }
+  toast('WhatsApp number saved', 'ok');
+}
+
+function loadWaSettings() {
+  const savedPhone = localStorage.getItem('se7en_wa_phone') || '';
+  const waEnabled  = localStorage.getItem('se7en_wa_enabled') === 'true';
+  const phoneInput = document.getElementById('wa-phone');
+  const togWA      = document.getElementById('tog-whatsapp');
+  const waRow      = document.getElementById('wa-number-row');
+  const status     = document.getElementById('wa-phone-status');
+  if (phoneInput && savedPhone) phoneInput.value = savedPhone;
+  if (waEnabled && togWA && waRow) {
+    togWA.classList.remove('off');
+    togWA.classList.add('on');
+    waRow.style.display = 'flex';
+    if (status && savedPhone) { status.textContent = '✓ Number saved — WhatsApp confirmations active.'; status.style.color = 'var(--green)'; }
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id === 'wa-phone') { e.preventDefault(); saveWaPhone(); }
+});
+
+document.getElementById('date-disp').textContent =
+  new Date().toLocaleDateString('en-GB',{ weekday:'short', day:'numeric', month:'short', year:'numeric' });
+
+if (Notification.permission === 'default') Notification.requestPermission();
+
+loadProds();
+fallbackToLocal();
+initFirebase();
+loadWaSettings();
+</script>
+</body>
+</html>

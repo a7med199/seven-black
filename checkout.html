@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Se7en</title>
+  <meta name="description" content="Fill in your order details and complete your Se7en checkout." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .shipping-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+    .shipping-note-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .shipping-note strong { color: #fff; display: block; margin-bottom: 2px; font-size: 0.84rem; }
+    .free-ship-tag {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(41,199,111,0.14);
+      color: #29c76f;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .promo-block { margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; }
+    .promo-label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+    .promo-row { display: flex; gap: 8px; }
+    .promo-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: inherit;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .promo-input:focus { border-color: rgba(255,255,255,0.3); }
+    .promo-input::placeholder { text-transform: none; letter-spacing: 0; color: rgba(255,255,255,0.3); }
+    .promo-apply {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 11px 18px;
+      color: #fff;
+      font-size: 0.84rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+      white-space: nowrap;
+    }
+    .promo-apply:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.26); }
+    .promo-feedback { margin-top: 8px; font-size: 0.8rem; min-height: 18px; transition: opacity 0.2s; }
+    .promo-feedback.ok  { color: #29c76f; }
+    .promo-feedback.err { color: #e04f4f; }
+    .discount-row { display: none; }
+    .discount-row.visible { display: flex; }
+  </style>
+</head>
+<body data-page="checkout">
+  <div class="page-transition"></div>
+
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container">
+      <a href="index.html" class="brand" aria-label="Se7en home"><img src="assets/Seven7.png" alt="Se7en" class="brand-logo"></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span></button>
+      <div class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <button class="cart-button" id="cartButton">Cart <span id="cartCount">0</span></button>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-drawer__header"><h3>Cart</h3><button class="icon-button" id="closeCart">✕</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
+      <button class="primary-button full checkout-button">Checkout</button>
+    </div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <main class="page-shell container checkout-layout">
+    <section class="checkout-copy reveal">
+      <p class="eyebrow">Checkout</p>
+      <h1>Fill in your order details</h1>
+      <p>Complete your shipping information below and review your selected pieces before placing the order.</p>
+
+      <div class="success-message" id="orderSuccess" hidden></div>
+
+      <div class="empty-order-state" id="checkoutEmpty" hidden>
+        <h3>Your cart is empty</h3>
+        <p>Add products from the shop first, then return here to complete your order.</p>
+        <a href="shop.html" class="primary-button">Go to Shop</a>
+      </div>
+
+      <form class="checkout-form" id="orderForm" novalidate>
+        <div class="field-row">
+          <div class="field-group">
+            <label>First Name</label>
+            <input type="text" name="firstName" placeholder="First name" required />
+          </div>
+          <div class="field-group">
+            <label>Last Name</label>
+            <input type="text" name="lastName" placeholder="Last name" required />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field-group">
+          <label>Phone</label>
+          <input type="tel" name="phone" placeholder="Phone number" required />
+        </div>
+        <div class="field-group">
+          <label>Address</label>
+          <input type="text" name="address" placeholder="Street address" required />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>City</label>
+            <input type="text" name="city" placeholder="City" required />
+          </div>
+          <div class="field-group">
+            <label>Country</label>
+            <input type="text" name="country" placeholder="Country" required />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Order Notes</label>
+          <textarea name="notes" rows="5" placeholder="Size, delivery notes, or special requests"></textarea>
+        </div>
+        <button type="submit" class="primary-button full" id="placeOrderButton">Place Order</button>
+      </form>
+    </section>
+
+    <aside class="order-summary reveal delay-1" id="checkoutContent">
+      <div>
+        <p class="eyebrow">Order Summary</p>
+        <h2>Selected items</h2>
+      </div>
+      <div class="summary-items" id="checkoutItems"></div>
+      <div class="summary-totals">
+        <div class="cart-total-row"><span>Subtotal</span><strong id="checkoutSubtotal">0 L.E</strong></div>
+        <div class="cart-total-row discount-row" id="discountRow"><span id="discountLabel">Discount</span><strong id="checkoutDiscount" style="color:#29c76f">−0 L.E</strong></div>
+        <div class="cart-total-row"><span>Shipping</span><strong id="checkoutShipping">65 L.E</strong></div>
+        <div class="cart-total-row total"><span>Total</span><strong id="checkoutTotal">0 L.E</strong></div>
+      </div>
+
+      <!-- Discount code -->
+      <div class="promo-block">
+        <div class="promo-label">Promo / Discount Code</div>
+        <div class="promo-row">
+          <input class="promo-input" id="promoInput" type="text" placeholder="Enter code" autocomplete="off" maxlength="20">
+          <button class="promo-apply" id="promoApply" onclick="applyPromo()">Apply</button>
+        </div>
+        <div class="promo-feedback" id="promoFeedback"></div>
+      </div>
+
+      <!-- Shipping info note -->
+      <div class="shipping-note" style="margin-top:16px">
+        <span class="shipping-note-icon">🚚</span>
+        <div>
+          <strong>Nationwide Shipping</strong>
+          <strong>65 L.E for Cairo - Giza</strong> Orders Will Deliverd form 4 to 6 days. <br>Other governorates: Shipping fees may vary by location.
+          <span class="free-ship-tag">✓ Free shipping on orders 1500 L.E+</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <a class="whatsapp-float" href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">WhatsApp</a>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a href="index.html" class="brand footer-brand">Se7en</a><p>Premium monochrome essentials.</p></div>
+      <div><h4>Navigate</h4><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div><h4>Social</h4><a href="https://www.instagram.com/seven7_eg/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // ── Discount codes ────────────────────────────────────────────────────────
+    const DISCOUNT_CODES = {
+      'SEV10': 10,   // 10% off
+      'ZA777': 15,   // 15% off
+      '20777': 20    // 20% off
+    };
+
+    // ── FIX: declared on window so main.js (buildOrderFromForm) can read it ──
+    window.activeDiscount = 0;
+
+    function applyPromo() {
+      const raw      = document.getElementById('promoInput').value.trim().toUpperCase();
+      const feedback = document.getElementById('promoFeedback');
+      const row      = document.getElementById('discountRow');
+      const label    = document.getElementById('discountLabel');
+
+      if (!raw) {
+        feedback.textContent = 'Please enter a code.';
+        feedback.className   = 'promo-feedback err';
+        return;
+      }
+
+      if (DISCOUNT_CODES[raw] !== undefined) {
+        window.activeDiscount = DISCOUNT_CODES[raw]; // FIX: write to window
+        label.textContent = `Discount (${window.activeDiscount}% off)`;
+        row.classList.add('visible');
+        feedback.textContent = `✓ Code "${raw}" applied — ${window.activeDiscount}% off!`;
+        feedback.className   = 'promo-feedback ok';
+        document.getElementById('promoInput').disabled = true;
+        document.getElementById('promoApply').disabled = true;
+        document.getElementById('promoApply').textContent = 'Applied ✓';
+      } else {
+        window.activeDiscount = 0; // FIX: write to window
+        row.classList.remove('visible');
+        feedback.textContent = '✗ Invalid code. Please try again.';
+        feedback.className   = 'promo-feedback err';
+      }
+
+      refreshSummaryTotals();
+    }
+
+    // Allow Enter key in promo input
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('promoInput')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); applyPromo(); }
+      });
+    });
+
+    // Recalculate totals display whenever discount changes or summary re-renders
+    function refreshSummaryTotals() {
+      const subtotalEl  = document.getElementById('checkoutSubtotal');
+      const discountEl  = document.getElementById('checkoutDiscount');
+      const shippingEl  = document.getElementById('checkoutShipping');
+      const totalEl     = document.getElementById('checkoutTotal');
+      if (!subtotalEl) return;
+
+      const subtotalRaw        = parseInt(subtotalEl.textContent) || 0;
+      const discountPct        = window.activeDiscount || 0; // FIX: read from window
+      const discountAmt        = Math.round(subtotalRaw * discountPct / 100);
+      const discountedSubtotal = subtotalRaw - discountAmt;
+      const shipping           = discountedSubtotal >= 1500 ? 0 : 65;
+      const total              = discountedSubtotal + shipping;
+
+      if (discountEl) discountEl.textContent = `−${discountAmt} L.E`;
+      if (shippingEl) shippingEl.textContent = shipping === 0 ? 'Free' : `${shipping} L.E`;
+      if (totalEl)    totalEl.textContent    = `${total} L.E`;
+    }
+
+    window.addEventListener('se7en:summaryRendered', refreshSummaryTotals);
+  </script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Se7en — Essentials Redefined</title>
+  <meta name="description" content="Se7en — premium black-and-white streetwear with a luxury minimalist aesthetic." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Featured card image frame */
+    .feature-card__media.img-frame {
+      min-height: 340px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.03);
+      position: relative;
+    }
+    .feature-card__media.img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 420ms cubic-bezier(.2,.8,.2,1);
+    }
+    .feature-card:hover .feature-card__media.img-frame img {
+      transform: scale(1.06);
+    }
+    .feature-fit-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(10,10,10,0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.82);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .feature-color-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .feature-cdot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.28);
+      flex-shrink: 0;
+    }
+    /* Hero real photo */
+    .hero-photo-shell {
+      width: min(520px, 100%);
+      aspect-ratio: 3 / 4;
+      border-radius: 36px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #0a0a0a;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 600ms cubic-bezier(.2,.8,.2,1);
+    }
+    .hero-photo-shell:hover .hero-photo {
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+<body data-page="home">
+  <div class="page-transition"></div>
+
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container">
+      <a href="index.html" class="brand" aria-label="Se7en home"><img src="assets/Seven7.png" alt="Se7en" class="brand-logo"></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span>
+      </button>
+      <div class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <button class="cart-button" id="cartButton">Cart <span id="cartCount">0</span></button>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-drawer__header">
+      <h3>Cart</h3>
+      <button class="icon-button" id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">$0</strong>
+      </div>
+      <button class="primary-button full checkout-button">Checkout</button>
+    </div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <main>
+    <section class="hero">
+      <div class="hero__bg-grid"></div>
+      <div class="container hero__content">
+        <div class="hero__text reveal">
+          <p class="eyebrow">Luxury Streetwear / Minimal Form</p>
+          <h1>ESSENTIALS<br>REDEFINED</h1>
+          <p class="hero__description">Precision silhouettes, monochrome layers, and a quietly bold attitude built for the modern wardrobe.</p>
+          <div class="hero__actions">
+            <a href="shop.html" class="primary-button">Shop Now</a>
+            <a href="#featured" class="secondary-button">Explore Collection</a>
+          </div>
+        </div>
+        <div class="hero__visual reveal delay-1">
+          <div class="hero-photo-shell parallax" data-speed="0.08">
+            <img src="assets/IMG_1262.png" alt="Se7en — Oversize Fit" class="hero-photo">
+          </div>
+          <div class="hero__label glass-card">Collection 2026 / Premium Cotton</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="marquee-band">
+      <div class="marquee-track">
+        <span>Minimalism</span>
+        <span>Premium Fabrication</span>
+        <span>Luxury Streetwear</span>
+        <span>Monochrome Identity</span>
+        <span>Minimalism</span>
+        <span>Premium Fabrication</span>
+        <span>Luxury Streetwear</span>
+      </div>
+    </section>
+
+    <section class="featured-section container" id="featured">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Featured Drop</p>
+        <h2>Curated essentials with sculpted presence</h2>
+      </div>
+      <div class="featured-grid">
+
+        <!-- Box Fit Tee — Original -->
+        <article class="feature-card reveal product-tilt parallax" data-speed="0.05">
+          <a href="product.html?id=tshirt-box-1" class="feature-card__media img-frame">
+            <img src="assets/tshirt-box-black.PNG" alt="Box Fit Tee — Original Black" loading="lazy">
+            <span class="feature-fit-badge">Box Fit</span>
+          </a>
+          <div class="feature-card__body">
+            <h3>Box Fit Tee — Original</h3>
+            <div class="feature-color-dots">
+              <span class="feature-cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="feature-cdot" style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="feature-cdot" style="background:#8A8A8A" title="Gray"></span>
+              <span class="feature-cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+            <p>The original Box Fit essential with dropped shoulders, structured hem, and 100% cotton.</p>
+            <div class="card-row">
+              <span>550 L.E</span>
+              <a href="product.html?id=tshirt-box-1" class="primary-button">View Product</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Box Fit Tee — New Drop -->
+        <article class="feature-card reveal delay-1 product-tilt">
+          <a href="product.html?id=tshirt-box-new-1" class="feature-card__media img-frame">
+            <img src="assets/box-fit/box_white1.PNG" alt="Box Fit Tee — New Drop White" loading="lazy">
+            <span class="feature-fit-badge">Box Fit · New</span>
+          </a>
+          <div class="feature-card__body">
+            <h3>Box Fit Tee — New Drop</h3>
+            <div class="feature-color-dots">
+              <span class="feature-cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="feature-cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="feature-cdot" style="background:#555555" title="Dark Gray"></span>
+              <span class="feature-cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+            <p>New uploaded Box Fit colors with front and back imagery — 100% cotton.</p>
+            <div class="card-row">
+              <span>720 L.E</span>
+              <a href="product.html?id=tshirt-box-new-1" class="primary-button">View Product</a>
+            </div>
+          </div>
+        </article>
+
+
+        <!-- Cloud Box Tee -->
+        <article class="feature-card reveal delay-2 product-tilt">
+          <a href="product.html?id=cloud-box-tee" class="feature-card__media img-frame">
+            <img src="assets/new/red-face.png" alt="Cloud Box Tee — Black" loading="lazy">
+            <span class="feature-fit-badge">Box Fit · New</span>
+          </a>
+          <div class="feature-card__body">
+            <h3>Cloud Box Tee</h3>
+            <div class="feature-color-dots">
+              <span class="feature-cdot" style="background:#C62828" title="Red"></span>
+              <span class="feature-cdot" style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="feature-cdot" style="background:#8A8A8A" title="Gray"></span>
+              <span class="feature-cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="feature-cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="feature-cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+            <p>Cloud Box Tee — premium box fit with a clean structured silhouette.</p>
+            <div class="card-row">
+              <span>720 L.E</span>
+              <a href="product.html?id=cloud-box-tee" class="primary-button">View Product</a>
+            </div>
+          </div>
+        </article>
+
+         <!-- Oversize Fit Tee — New Drop -->
+        <article class="feature-card reveal delay-3 product-tilt">
+          <a href="product.html?id=tshirt-over-new-1" class="feature-card__media img-frame">
+            <img src="assets/oversize-fit/over_navy_blue1.PNG" alt="Oversize Fit Tee — New Drop Black" loading="lazy">
+            <span class="feature-fit-badge">Oversize · New</span>
+          </a>
+          <div class="feature-card__body">
+            <h3>Oversize Fit Tee — New Drop</h3>
+            <div class="feature-color-dots">
+              <span class="feature-cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="feature-cdot" style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="feature-cdot" style="background:#555555" title="Dark Gray"></span>
+              <span class="feature-cdot" style="background:#1B2A4A" title="Navy Blue"></span>
+              <span class="feature-cdot" style="background:#6E1423" title="Burgundy"></span>
+            </div>
+            <p>New uploaded Oversize Fit colors with front and back imagery — 100% cotton.</p>
+            <div class="card-row">
+              <span>750 L.E</span>
+              <a href="product.html?id=tshirt-over-new-1" class="primary-button">View Product</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Oversize Fit Tee — Original -->
+        <article class="feature-card reveal delay-2 product-tilt parallax" data-speed="0.03">
+          <a href="product.html?id=tshirt-over-1" class="feature-card__media img-frame">
+            <img src="assets/tshirt-box-burgundy.PNG" alt="Oversize Fit Tee — Original Black" loading="lazy">
+            <span class="feature-fit-badge">Oversize Fit</span>
+          </a>
+          <div class="feature-card__body">
+            <h3>Oversize Fit Tee — Original</h3>
+            <div class="feature-color-dots">
+              <span class="feature-cdot" style="background:#FFFFFF" title="White"></span>
+              <span class="feature-cdot" style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.18)" title="Black"></span>
+              <span class="feature-cdot" style="background:#C0C0C0" title="Light Gray"></span>
+              <span class="feature-cdot" style="background:#6E1423" title="Burgundy"></span>
+              <span class="feature-cdot" style="background:#89C4E1" title="Baby Blue"></span>
+            </div>
+            <p>The original oversized unisex tee with premium feel and 100% cotton.</p>
+            <div class="card-row">
+              <span>600 L.E</span>
+              <a href="product.html?id=tshirt-over-1" class="primary-button">View Product</a>
+            </div>
+          </div>
+        </article>
+
+       
+
+
+      </div>
+    </section>
+
+    <section class="story-band parallax" data-speed="0.04">
+      <div class="container story-band__inner reveal">
+        <p class="eyebrow">Designed to Move Quietly</p>
+        <h2>Black. White. Shape. Space.</h2>
+        <p>A premium digital flagship concept combining motion, restraint, and tactile detail—crafted for high-end streetwear storytelling.</p>
+      </div>
+    </section>
+
+    <section class="split-showcase container">
+      <div class="split-showcase__copy reveal">
+        <p class="eyebrow">Materiality</p>
+        <h2>Engineered for smooth motion and deliberate contrast</h2>
+        <p>Scroll-triggered reveals, subtle parallax, depth-rich hover states, and immersive WebGL hero animation create a polished editorial shopping experience.</p>
+      </div>
+      <div class="split-showcase__stack reveal delay-1">
+        <div class="stack-card product-tilt">
+          <span>Premium fits. Clean aesthetics.</span>
+          <strong>Se7en combines luxury streetwear with clean modern design to create pieces made for daily confidence</strong>
+        </div>
+        <div class="stack-card product-tilt">
+          <span>Wear the future of streetwear</span>
+          <strong>Smooth design meets premium comfort</strong>
+        </div>
+        <div class="stack-card product-tilt">
+          <span>Offers</span>
+          <strong>A lot of offers every month</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="brand footer-brand">Se7en</a>
+        <p>Minimal luxury streetwear concept site.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <a href="https://www.instagram.com/seven7_eg/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/message/PQXWR2OT7LOYE1?src=qr" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
