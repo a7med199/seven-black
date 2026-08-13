@@ -152,7 +152,7 @@ const OVERSIZE_FIT_COLORS = [
     images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_white1.PNG', 'assets/oversize-fit/over_white2.PNG' ] }
   },
   { name: 'Black',      hex: '#0a0a0a', threehex: 0x0a0a0a,
-    images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_over_black1.PNG', 'assets/oversize-fit/over_black2.PNG'] }
+    images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_over_black1.PNG', 'assets\oversize-fit\over_black2.png'] }
   },
   { name: 'Dark Gray', hex: '#555555', threehex: 0x555555,
     images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_dark_gray1.PNG', 'assets/oversize-fit/over_dark_gray2.PNG'] }
@@ -253,7 +253,7 @@ const PRODUCTS = {
   'tshirt-over-1': { id: 'tshirt-over-1', name: 'Oversize Fit Tee — Original', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 600, currency: 'L.E', colors: ORIGINAL_OVERSIZE_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-black.PNG', description: 'The original Oversize Fit unisex tee from the Se7en collection. Premium feel and 100% cotton.' },
   'tshirt-reg-1': { id: 'tshirt-reg-1', name: 'Regular Fit Tee', category: 'T-Shirt', subcategory: 'Regular', type: 'tshirt', price: 550, currency: 'L.E', colors: REGULAR_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-navy.PNG', description: 'Classic everyday t-shirt with a clean fit, soft fabric, 100% cotton and all-day comfort.' },
   'tshirt-box-new-1': { id: 'tshirt-box-new-1', name: 'Box Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Box Fit', type: 'tshirt', price: 720, currency: 'L.E', colors: BOX_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/box-fit/box_white1.PNG', description: 'New Box Fit T-Shirt drop. Unisex 100% cotton with a structured shape and front/back product imagery.' },
-  'tshirt-over-new-1': { id: 'tshirt-over-new-1', name: 'Oversize Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 750, currency: 'L.E', colors: OVERSIZE_FIT_COLORS, sizes: ['S', 'M', 'L', 'XL', 'XXL'], image: 'assets/oversize-fit/over_over_black1.PNG', description: 'New Oversize Fit T-Shirt drop. Unisex 100% cotton with a relaxed silhouette and front/back product imagery.' },
+  'tshirt-over-new-1': { id: 'tshirt-over-new-1', name: 'Oversize Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 750, currency: 'L.E', colors: OVERSIZE_FIT_COLORS, sizes: ['S', 'M', 'L', 'XL', 'XXL'], image: 'assets\oversize-fit\over_over_black1.png', description: 'New Oversize Fit T-Shirt drop. Unisex 100% cotton with a relaxed silhouette and front/back product imagery.' },
   'tshirt-1': { id: 'tshirt-1', name: 'Core T-Shirt', category: 'T-Shirt', subcategory: 'Box Fit', type: 'tshirt', price: 68, currency: 'L.E', colors: TSHIRT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-white.PNG', description: 'A minimal jersey essential with a boxy fit.' },
   'tshirt-2': { id: 'tshirt-2', name: 'Contour Tee', category: 'T-Shirt', subcategory: 'Regular', type: 'tshirt', price: 74, currency: 'L.E', colors: TSHIRT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-navy.PNG', description: 'Built with soft structure and tailored proportions.' },
   'cloud-box-tee': {
