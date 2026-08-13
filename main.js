@@ -152,7 +152,7 @@ const OVERSIZE_FIT_COLORS = [
     images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_white1.PNG', 'assets/oversize-fit/over_white2.PNG' ] }
   },
   { name: 'Black',      hex: '#0a0a0a', threehex: 0x0a0a0a,
-    images: { 'tshirt-over-new-1': ['assets\oversize-fit\over_over_black1.png', 'assets\oversize-fit\over_black2.png'] }
+    images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_over_black1.png', 'assets/oversize-fit/over_black2.png'] }
   },
   { name: 'Dark Gray', hex: '#555555', threehex: 0x555555,
     images: { 'tshirt-over-new-1': ['assets/oversize-fit/over_dark_gray1.PNG', 'assets/oversize-fit/over_dark_gray2.PNG'] }
