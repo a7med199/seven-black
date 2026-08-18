@@ -1247,12 +1247,12 @@ body.is-transitioning .page-transition {
 @media (max-width: 600px) {
 
     .promo-bar {
-        position: relative;
-        z-index: 1000;
+        height: 55px;
+        padding: 6px 10px;
     }
 
     .site-header {
-        top: 78px;
+        top: 50px;
     }
 
 }
