@@ -35,7 +35,7 @@ const SIZE_CHARTS = {
     label: 'Boxy Fit Shirt — Measurements',
     columns: ['Size', 'Width (cm)', 'Length (cm)'],
     rows: [
-      ['M/S', '58', '64'],
+      ['M', '58', '64'],
       ['L',   '60', '66'],
       ['XL',  '62', '68'],
       ['XXL', '64', '70'],
@@ -45,7 +45,6 @@ const SIZE_CHARTS = {
     label: 'Oversize Shirt — New Drop Measurements',
     columns: ['Size', 'Width (cm)', 'Length (cm)'],
     rows: [
-      ['S',   '56', '69'],
       ['M',   '58', '71'],
       ['L',   '59', '73'],
       ['XL',  '62', '75'],
@@ -76,7 +75,6 @@ const SIZE_CHARTS = {
     label: 'Slouch Standard Tee — Measurements',
     columns: ['Size', 'Width (cm)', 'Length (cm)'],
     rows: [
-      ['S',   '56', '69'],
       ['M',   '58', '71'],
       ['L',   '59', '73'],
       ['XL',  '62', '75'],
@@ -167,40 +165,41 @@ const OVERSIZE_FIT_COLORS = [
 
 // ─── New Cloud / Slouch color catalog ─────────────────────────────────────────
 const CLOUD_SLouch_COLORS = [
-  { name: 'Red',        hex: '#C62828', threehex: 0xc62828,
-    images: {
-      'cloud-box-tee': ['assets/new/red-face.png', 'assets/new/red-back.png'],
-      'slouch-standard-tee': ['assets/new/red-face.png', 'assets/new/red-back.png']
-    }
-  },
-  { name: 'Black',      hex: '#0A0A0A', threehex: 0x0a0a0a,
+  
+  { name: 'Black',      hex: '#0A0A0A', threehex: 0x0a0a0a,  //1
     images: {
       'cloud-box-tee': ['assets/new/black-face.png', 'assets/new/black-back.png'],
       'slouch-standard-tee': ['assets/new/black-face.png', 'assets/new/black-back.png']
     }
   },
-  { name: 'Navy Blue',  hex: '#1B2A4A', threehex: 0x1b2a4a,
-    images: {
-      'cloud-box-tee': ['assets/new/navy-blue-face.png', 'assets/new/navy-blue-back.png'],
-      'slouch-standard-tee': ['assets/new/navy-blue-face.png', 'assets/new/navy-blue-back.png']
-    }
-  },
-  { name: 'White',      hex: '#FFFFFF', threehex: 0xf5f5f5,
+  { name: 'White',      hex: '#FFFFFF', threehex: 0xf5f5f5, //2
     images: {
       'cloud-box-tee': ['assets/new/White-face.png', 'assets/new/white-back.png'],
       'slouch-standard-tee': ['assets/new/White-face.png', 'assets/new/white-back.png']
     }
   },
-  { name: 'Gray',       hex: '#8A8A8A', threehex: 0x8a8a8a,
+  { name: 'Gray',       hex: '#8A8A8A', threehex: 0x8a8a8a, //3
     images: {
       'cloud-box-tee': ['assets/new/gray-face.png', 'assets/new/gray-back.png'],
       'slouch-standard-tee': ['assets/new/gray-face.png', 'assets/new/gray-back.png']
     }
   },
-  { name: 'Burgundy',   hex: '#6E1423', threehex: 0x6e1423,
+  { name: 'Burgundy',   hex: '#6E1423', threehex: 0x6e1423, //4
     images: {
       'cloud-box-tee': ['assets/new/bergandy-face.png', 'assets/new/bergandy-back.png'],
       'slouch-standard-tee': ['assets/new/bergandy-face.png', 'assets/new/bergandy-back.png']
+    }
+  },
+  { name: 'Navy Blue',  hex: '#1B2A4A', threehex: 0x1b2a4a, //5
+    images: {
+      'cloud-box-tee': ['assets/new/navy-blue-face.png', 'assets/new/navy-blue-back.png'],
+      'slouch-standard-tee': ['assets/new/navy-blue-face.png', 'assets/new/navy-blue-back.png']
+    }
+  },
+  { name: 'Red',        hex: '#C62828', threehex: 0xc62828, //6
+    images: {
+      'cloud-box-tee': ['assets/new/red-face.png', 'assets/new/red-back.png'],
+      'slouch-standard-tee': ['assets/new/red-face.png', 'assets/new/red-back.png']
     }
   },
 ];
@@ -253,7 +252,7 @@ const PRODUCTS = {
   'tshirt-over-1': { id: 'tshirt-over-1', name: 'Oversize Fit Tee — Original', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 600, currency: 'L.E', colors: ORIGINAL_OVERSIZE_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-black.PNG', description: 'The original Oversize Fit unisex tee from the Se7en collection. Premium feel and 100% cotton.' },
   'tshirt-reg-1': { id: 'tshirt-reg-1', name: 'Regular Fit Tee', category: 'T-Shirt', subcategory: 'Regular', type: 'tshirt', price: 550, currency: 'L.E', colors: REGULAR_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-navy.PNG', description: 'Classic everyday t-shirt with a clean fit, soft fabric, 100% cotton and all-day comfort.' },
   'tshirt-box-new-1': { id: 'tshirt-box-new-1', name: 'Box Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Box Fit', type: 'tshirt', price: 720, currency: 'L.E', colors: BOX_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/box-fit/box_white1.PNG', description: 'New Box Fit T-Shirt drop. Unisex 100% cotton with a structured shape and front/back product imagery.' },
-  'tshirt-over-new-1': { id: 'tshirt-over-new-1', name: 'Oversize Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 750, currency: 'L.E', colors: OVERSIZE_FIT_COLORS, sizes: ['S', 'M', 'L', 'XL', 'XXL'], image: 'assets\oversize-fit\over_over_black1.png', description: 'New Oversize Fit T-Shirt drop. Unisex 100% cotton with a relaxed silhouette and front/back product imagery.' },
+  'tshirt-over-new-1': { id: 'tshirt-over-new-1', name: 'Oversize Fit Tee — New Drop', category: 'T-Shirt', subcategory: 'Oversize Fit', type: 'tshirt', price: 750, currency: 'L.E', colors: OVERSIZE_FIT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets\oversize-fit\over_over_black1.png', description: 'New Oversize Fit T-Shirt drop. Unisex 100% cotton with a relaxed silhouette and front/back product imagery.' },
   'tshirt-1': { id: 'tshirt-1', name: 'Core T-Shirt', category: 'T-Shirt', subcategory: 'Box Fit', type: 'tshirt', price: 68, currency: 'L.E', colors: TSHIRT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-white.PNG', description: 'A minimal jersey essential with a boxy fit.' },
   'tshirt-2': { id: 'tshirt-2', name: 'Contour Tee', category: 'T-Shirt', subcategory: 'Regular', type: 'tshirt', price: 74, currency: 'L.E', colors: TSHIRT_COLORS, sizes: ['M', 'L', 'XL', 'XXL'], image: 'assets/tshirt-box-navy.PNG', description: 'Built with soft structure and tailored proportions.' },
   'cloud-box-tee': {
@@ -278,7 +277,7 @@ const PRODUCTS = {
     price: 750,
     currency: 'L.E',
     colors: CLOUD_SLouch_COLORS,
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    sizes: ['M', 'L', 'XL', 'XXL'],
     image: 'assets/new/red.png',
     description: 'Slouch Standard tee with a relaxed oversized silhouette and front/back product imagery.'
   },
@@ -763,8 +762,7 @@ function hydrateProductPage() {
   if (product.colors && product.colors.length) state.productColor = product.colors[0];
 
   const set = (sel, val) => { const el = qs(sel); if (el) el.textContent = val; };
-  set('#productCategory', product.subcategory ? `${product.category} — ${product.subcategory}` : product.category);
-  set('#productName', product.name);
+set('#productCategory', product.subcategory ? `${product.category} — ${product.subcategory} — MENTALITY COLLECTION` : `${product.category} — MENTALITY COLLECTION`);  set('#productName', product.name);
   set('#productFit', product.subcategory || 'Classic');
   set('#productPalette', product.colors ? `${product.colors.length} Colors` : 'Core');
 

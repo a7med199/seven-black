@@ -1024,34 +1024,44 @@ function playBeep() {
 }
 
 function buildWhatsAppURL(order) {
-  const inputVal  = (document.getElementById('wa-phone')?.value || '').trim();
-  const waPhone   = (inputVal || localStorage.getItem('se7en_wa_phone') || '').replace(/[\s\-()]/g, '');
-  if (!waPhone) return null;
-  const itemsList = (order.items||[])
-    .map(i => `  • ${i.productName}${i.color?' / '+i.color:''}${i.size?' / '+i.size:''} × ${i.quantity||1}`)
+
+  let customerPhone = (order.phone || '').replace(/\D/g, '');
+
+  if (!customerPhone) {
+    toast('⚠ Customer phone number is missing', 'err');
+    return null;
+  }
+
+
+  if (customerPhone.startsWith('01')) {
+    customerPhone = '2' + customerPhone;
+  }
+
+  const itemsList = (order.items || [])
+    .map(i => `  • ${i.productName}${i.color ? ' / ' + i.color : ''}${i.size ? ' / ' + i.size : ''} × ${i.quantity || 1}`)
     .join('\n');
+
   const msg =
 `Order confirmation!
 New Se7en Order — ${order.id}
 
- Customer:
+Customer:
 Name: ${order.firstName} ${order.lastName}
-Phone: ${order.phone||'—'}
-Email: ${order.email||'—'}
+Phone: ${order.phone || '—'}
+Email: ${order.email || '—'}
 
 Items:
 ${itemsList}
 
 Pricing:
-Subtotal: ${(order.subtotal||0).toLocaleString()} L.E${order.discountAmt?'\nDiscount: −'+(order.discountAmt).toLocaleString()+' L.E':''}
-Shipping: ${order.shipping===0?'Free':(order.shipping||65).toLocaleString()+' L.E'}
-*Total: ${(order.total||0).toLocaleString()} L.E*
+Subtotal: ${(order.subtotal || 0).toLocaleString()} L.E${order.discountAmt ? '\nDiscount: −' + (order.discountAmt).toLocaleString() + ' L.E' : ''}
+Shipping: ${order.shipping === 0 ? 'Free' : (order.shipping || 65).toLocaleString() + ' L.E'}
+Total: ${(order.total || 0).toLocaleString()} L.E
 
 Address:
-${order.address||'—'}, ${order.city||'—'}, ${order.country||'—'}${order.notes?'\n\n📝 Notes: '+order.notes:''}`;
+${order.address || '—'}, ${order.city || '—'}, ${order.country || '—'}${order.notes ? '\n\n📝 Notes: ' + order.notes : ''}`;
 
-  const num = waPhone.startsWith('+') ? waPhone.slice(1) : waPhone;
-  return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/${customerPhone}?text=${encodeURIComponent(msg)}`;
 }
 
 function sendWhatsAppConfirmation(order) {
@@ -1095,14 +1105,12 @@ function dismissWaBanner(card) {
 }
 
 function openWhatsAppDirect(order) {
-  const inputVal = (document.getElementById('wa-phone')?.value || '').trim();
-  const waPhone  = inputVal || localStorage.getItem('se7en_wa_phone') || '';
-  if (!waPhone) {
-    toast('⚠ Add your WhatsApp number in Settings → Notifications', 'err');
-    return;
-  }
+
   const url = buildWhatsAppURL(order);
-  if (url) window.open(url, '_blank', 'noopener');
+
+  if (url) {
+    window.open(url, '_blank', 'noopener');
+  }
 }
 
 function setSyncStatus(type, label) {
