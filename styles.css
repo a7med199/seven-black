@@ -1088,10 +1088,10 @@ body.is-transitioning .page-transition {
 
   .whatsapp-float {
     right: 12px;
-    left: 12px;
+    left: auto;
     bottom: 12px;
     justify-content: center;
-  }
+}
 }
 
 .logo-img{
