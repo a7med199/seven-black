@@ -1225,3 +1225,34 @@ body.is-transitioning .page-transition {
     color: #888;
     font-size: 22px;
 }
+
+@media (max-width: 600px) {
+
+    .promo-bar {
+        padding: 10px 8px;
+        gap: 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .promo-separator {
+        font-size: 14px;
+    }
+
+    .promo-bar strong {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .promo-bar {
+        position: relative;
+        z-index: 1000;
+    }
+
+    .site-header {
+        top: 78px;
+    }
+
+}
